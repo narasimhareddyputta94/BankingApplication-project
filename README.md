@@ -14,6 +14,7 @@ This repository contains the code for a banking application, developed as part o
 | Mohammad           | Account Management                                             |
 | Noor               | Loan Management                                                |
 | Narasimha Reddy    | Transaction Management, Notifications Management & Admin Panel |
+| Shashank Datt      | Authentication & Authorization                                 |
 
 ---
 
