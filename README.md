@@ -9,7 +9,8 @@ This code is associated with DePaul's SE452 course using a banking application a
 
 | Member   | Area | 
 |--------- |----------------------|
-| Mohammad | Account Management   | 
+| Mohammad | Account Management   |
+| Noor     | Loan Management      | 
     
 
 
