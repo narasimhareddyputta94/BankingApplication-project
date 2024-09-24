@@ -3,8 +3,21 @@
 ### Project Overview
 This repository contains the code for a banking application, developed as part of DePaul University's SE452 course. The project addresses various functionalities typically found in banking systems, and it is structured into different modules, each managed by a team member.
 
-**Milestone 1:** Define the project, its structure, and assign areas of responsibility to each group member.
+---
 
+## Prototype Images
+
+Here are the prototype images of the application:
+
+### Screenshot 1:
+![Prototype Image 1](src/main/resources/Images/Screenshot%202024-09-23%20194651.png)
+
+### Screenshot 2:
+![Prototype Image 2](src/main/resources/Images/Screenshot%202024-09-23%20194703.png)
+
+---
+
+## Project Members and Responsibilities
 ---
 
 ## Project Members and Responsibilities
