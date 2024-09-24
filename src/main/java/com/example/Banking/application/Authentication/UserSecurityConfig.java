@@ -1,4 +1,4 @@
-package com.example.Banking.application.Autentication;
+package com.example.Banking.application.Authentication;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
