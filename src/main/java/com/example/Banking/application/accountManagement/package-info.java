@@ -16,4 +16,4 @@
  * 
  * @author Mohammad Abdelsalam
  */
-package com.example.Banking.application.account_management;
+package com.example.Banking.application.accountManagement;

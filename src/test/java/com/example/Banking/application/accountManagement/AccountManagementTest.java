@@ -1,4 +1,4 @@
-package com.example.Banking.application.account_management;
+package com.example.Banking.application.accountManagement;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

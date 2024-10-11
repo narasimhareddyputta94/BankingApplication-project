@@ -1,4 +1,4 @@
-package com.example.Banking.application.account_management;
+package com.example.Banking.application.accountManagement;
 
 
 import lombok.AllArgsConstructor;
@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-public class AccountCreation {
+public class ViewBalance {
 	
-	public void createAccountType() {
+	public void viewBalance() {
 		// TO DO
 	}
 
