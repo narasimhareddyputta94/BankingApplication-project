@@ -1,6 +1,8 @@
 package com.example.Banking.application.accountManagement;
 
 
+import java.time.LocalDateTime;
+
 import com.example.Banking.application.Authentication.User;
 
 import jakarta.persistence.Entity;
@@ -29,10 +31,10 @@ public class AccountCreation {
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User userId;
+	private User user;
 	private String accountType;
 	private Long balance;
-	private String createOn;
+	private LocalDateTime createOn;
 
 	}
 

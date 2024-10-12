@@ -31,7 +31,7 @@ public class UpdateUser {
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User userId;
+	private User user;
     private String attributeUpdated;
     private String oldValue;
     private String newValue;

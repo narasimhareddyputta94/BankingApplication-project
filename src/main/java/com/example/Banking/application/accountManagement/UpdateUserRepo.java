@@ -2,6 +2,6 @@ package com.example.Banking.application.accountManagement;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface AccountUpdateRepo extends CrudRepository<UpdateUser, Long> {
+public interface UpdateUserRepo extends CrudRepository<UpdateUser, Long> {
 
 }
