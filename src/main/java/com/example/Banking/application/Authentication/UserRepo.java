@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepo extends JpaRepository<com.example.Banking.application.Autentication.User,Long> {
+public interface UserRepo extends JpaRepository<com.example.Banking.application.Authentication.User,Long> {
 
 	
 }

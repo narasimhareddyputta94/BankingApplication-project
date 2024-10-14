@@ -1,4 +1,4 @@
-package com.example.Banking.application.Admin_Panel;
+package com.example.Banking.application.adminPanel;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
