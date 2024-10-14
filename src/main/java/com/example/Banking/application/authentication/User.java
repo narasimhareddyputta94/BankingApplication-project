@@ -1,9 +1,17 @@
 package com.example.Banking.application.authentication;
 
+
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 import jakarta.persistence.*;
 
-@Table(name = "app_users")
+
 @Entity
+@Table(name= "Users")
 public class User {
 
 
@@ -32,6 +40,9 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public long getId() {
+		return id;
 	}
 	
 }
