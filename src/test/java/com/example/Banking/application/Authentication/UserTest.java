@@ -1,4 +1,4 @@
-package com.example.Banking.application.AuthenticationTest;
+package com.example.Banking.application.Authentication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

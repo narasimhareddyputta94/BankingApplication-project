@@ -2,6 +2,7 @@ package com.example.Banking.application.accountManagement;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,24 +13,36 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.Banking.application.Authentication.User;
+import com.example.Banking.application.Authentication.UserRepo;
+import com.example.Banking.application.Authentication.UserService;
 
 @DataJpaTest
 @ActiveProfiles("test")
+
 public class AccountCreationTest {
 	
 	@Autowired
 	private AccountCreationRepo accountRepo;
+	@Autowired
+	private UserRepo userRepo;
 	
 	@DisplayName("Test Creating An Account")
 	@Test
 	public void testAccountCreation() {
+		User user = new User();
+		user.setUsername("username123");
+		user.setEmail("123@gmail.com");
+		user.setPassword("Password");
+		assertNotNull(userRepo);
+		userRepo.save(user);
+		
+		
 		long initialCount = accountRepo.count();
 		long accountBalance = 1000;
-		//User user = new User();
 		LocalDateTime time = LocalDateTime.now();
 		AccountCreation account = new AccountCreation();
-		//user.setPassword("Test123");
-		//account.setUser(user);
+		user.setPassword("Test123");
+		account.setUser(user);
 		account.setAccountType("Checkings");
 		account.setBalance(accountBalance);
 		account.setCreateOn(time);
@@ -39,7 +52,7 @@ public class AccountCreationTest {
 		assertEquals("Checkings", account.getAccountType());
 		assertEquals(accountBalance, account.getBalance());
 		assertEquals(time, account.getCreateOn());
-		//assertEquals(user, account.getUser());
+		assertEquals(user, account.getUser());
 		assertEquals(initialCount + 1, finalCount);
 	}
 
@@ -50,7 +63,7 @@ public class AccountCreationTest {
 		        long accountBalance = 1000;
 		        AccountCreation account = new AccountCreation();
 		        //account.setAccountId(initialCount + 1);
-		       // account.setAccountType("Checkings");
+		        account.setAccountType("Checkings");
 		        account.setBalance(accountBalance);
 		        account.setCreateOn(LocalDateTime.now());
 
@@ -66,7 +79,14 @@ public class AccountCreationTest {
 		@Test
 		public void testGeneratedId() {
 			 long accountId = 0;
+			 User user = new User();
+				user.setUsername("username123");
+				user.setEmail("123@gmail.com");
+				user.setPassword("Password");
+				assertNotNull(userRepo);
+				userRepo.save(user);
 			 AccountCreation account = new AccountCreation();
+			 account.setUser(user);
 			 account.setAccountType("Savings");
 			 account.setBalance(1000L);
 			 account.setCreateOn(LocalDateTime.now());
@@ -79,7 +99,14 @@ public class AccountCreationTest {
 		@DisplayName("Test Deleting Account")
 		@Test
 		public void testDeleteAccount() {
+			User user = new User();
+			user.setUsername("username123");
+			user.setEmail("123@gmail.com");
+			user.setPassword("Password");
+			assertNotNull(userRepo);
+			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
+			account.setUser(user);
 			account.setAccountType("Checkings");
 			account.setBalance(200l);
 			account.setCreateOn(LocalDateTime.now());
@@ -95,7 +122,14 @@ public class AccountCreationTest {
 		@DisplayName("Test Updating Account")
 		@Test
 		public void testUpdateAccount() {
+			User user = new User();
+			user.setUsername("username123");
+			user.setEmail("123@gmail.com");
+			user.setPassword("Password");
+			assertNotNull(userRepo);
+			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
+			account.setUser(user);
 			account.setAccountType("Savings");
 			account.setBalance(1000l);
 			account.setCreateOn(LocalDateTime.now());
