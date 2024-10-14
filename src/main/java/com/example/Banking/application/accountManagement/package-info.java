@@ -5,9 +5,7 @@
  * </p>
  * <ul>
  *   <li><b>AccountCreation:</b> Allows users to create a checking or savings account.</li>
- *   <li><b>UpdateAccount:</b> Enables users to update profile information such as address, name, 
- *   security questions, and overall preferences.</li>
- *   <li><b>ViewBalance:</b> Provides users with the ability to view their current account balance.</li>
+ *   <li><b>AccountPreference:</b> Enables users to set there individual preferences for communication, alerts, and displays.</li>
  * </ul>
  * <p>
  * Future enhancements include the use of Lombok to remove repetitive boilerplate code and 
