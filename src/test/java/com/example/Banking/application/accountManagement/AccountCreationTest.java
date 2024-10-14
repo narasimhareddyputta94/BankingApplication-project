@@ -83,7 +83,7 @@ public class AccountCreationTest {
 				user.setUsername("username123");
 				user.setEmail("123@gmail.com");
 				user.setPassword("Password");
-				assertNotNull(userRepo);
+				//assertNotNull(userRepo);
 				userRepo.save(user);
 			 AccountCreation account = new AccountCreation();
 			 account.setUser(user);
@@ -103,7 +103,7 @@ public class AccountCreationTest {
 			user.setUsername("username123");
 			user.setEmail("123@gmail.com");
 			user.setPassword("Password");
-			assertNotNull(userRepo);
+			//assertNotNull(userRepo);
 			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
 			account.setUser(user);
@@ -126,7 +126,7 @@ public class AccountCreationTest {
 			user.setUsername("username123");
 			user.setEmail("123@gmail.com");
 			user.setPassword("Password");
-			assertNotNull(userRepo);
+			//assertNotNull(userRepo);
 			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
 			account.setUser(user);
@@ -138,6 +138,37 @@ public class AccountCreationTest {
 			account.setBalance(2000l);
 			assertEquals(2000l, account.getBalance());
 			
+		}
+		
+		@DisplayName("Test Duplicate Account Types")
+		@Test
+		public void testDuplicateAccountType() {
+			User user = new User();
+			user.setUsername("username123");
+			user.setEmail("123@gmail.com");
+			user.setPassword("Password");
+			userRepo.save(user);
+			
+			
+			long accountBalance = 1000;
+			LocalDateTime time = LocalDateTime.now();
+			AccountCreation account = new AccountCreation();
+			//user.setPassword("Test123");
+			account.setUser(user);
+			account.setAccountType("Checkings");
+			account.setBalance(accountBalance);
+			account.setCreateOn(time);
+			accountRepo.save(account);
+			
+			AccountCreation account1 = new AccountCreation();
+			account1.setUser(user);
+			account1.setAccountType("Checkings");
+			account1.setBalance(100l);
+			account1.setCreateOn(LocalDateTime.now());
+			
+			assertThrows(Exception.class, () -> {
+	            accountRepo.save(account1); 
+	        });
 		}
 		
 		

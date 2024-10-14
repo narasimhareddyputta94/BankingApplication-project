@@ -1,7 +1,11 @@
 package com.example.Banking.application.accountManagement;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,24 +23,27 @@ import com.example.Banking.application.Authentication.UserRepo;
 
 @DataJpaTest
 @ActiveProfiles("test")
+
 public class UpdateUserTest {
 	
 	@Autowired
 	private UpdateUserRepo updateUser;
 	@Autowired
 	private UserRepo userRepo;
+	//@Autowired
+	//private UpdateUserTrigger trigger;
 	
 	@DisplayName("Test Updating User Info")
 	@Test
 	public void testUserUpdate() {
-		User user = new User();
-		user.setUsername("username123");
-		user.setEmail("123@gmail.com");
-		user.setPassword("Password");
-		userRepo.save(user);
-		UpdateUser update = new UpdateUser();
-		update.setUser(user);
-		
+		 User user = new User();
+		    user.setUsername("username123");
+		    user.setEmail("123@gmail.com");
+		    user.setPassword("Password");
+		    userRepo.save(user);
+		    assertEquals(user.getPassword(), "Password");
+		   
+		    
 		
 	}
 
