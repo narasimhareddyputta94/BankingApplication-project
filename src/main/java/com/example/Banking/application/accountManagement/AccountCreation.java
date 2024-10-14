@@ -40,11 +40,17 @@ public class AccountCreation {
 	@NotNull
 	private User user;
 	@NotNull(message = "Account type is required")
-	private String accountType;
+	//private String accountType;
+	private AccountType accountType;
 	@NotNull(message = "Balance is required")
 	private Long balance;
 	@NotNull(message = "Creation date is required")
 	private LocalDateTime createOn;
+	
+	public enum AccountType {
+        CHECKINGS,
+        SAVINGS
+        }
 
 	}
 

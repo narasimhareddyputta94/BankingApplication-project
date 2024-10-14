@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.example.Banking.application.Authentication.User;
 import com.example.Banking.application.Authentication.UserRepo;
 import com.example.Banking.application.Authentication.UserService;
+import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -43,13 +44,14 @@ public class AccountCreationTest {
 		AccountCreation account = new AccountCreation();
 		user.setPassword("Test123");
 		account.setUser(user);
-		account.setAccountType("Checkings");
+		//account.setAccountType("Checkings");
+		account.setAccountType(AccountType.CHECKINGS);
 		account.setBalance(accountBalance);
 		account.setCreateOn(time);
 		accountRepo.save(account);
 		long finalCount = accountRepo.count();
 		
-		assertEquals("Checkings", account.getAccountType());
+		assertEquals(AccountType.CHECKINGS, account.getAccountType());
 		assertEquals(accountBalance, account.getBalance());
 		assertEquals(time, account.getCreateOn());
 		assertEquals(user, account.getUser());
@@ -59,11 +61,15 @@ public class AccountCreationTest {
 		@DisplayName("Test Account Creation With Missing Data")
 		@Test
 		public void testMissingData() {
+		
+			
 		        long initialCount = accountRepo.count(); 
 		        long accountBalance = 1000;
 		        AccountCreation account = new AccountCreation();
 		        //account.setAccountId(initialCount + 1);
-		        account.setAccountType("Checkings");
+		        
+		        //account.setAccountType("Checkings");
+		        account.setAccountType(AccountType.CHECKINGS);
 		        account.setBalance(accountBalance);
 		        account.setCreateOn(LocalDateTime.now());
 
@@ -87,7 +93,8 @@ public class AccountCreationTest {
 				userRepo.save(user);
 			 AccountCreation account = new AccountCreation();
 			 account.setUser(user);
-			 account.setAccountType("Savings");
+			 //account.setAccountType("Savings");
+			 account.setAccountType(AccountType.SAVINGS);
 			 account.setBalance(1000L);
 			 account.setCreateOn(LocalDateTime.now());
 			 accountRepo.save(account);
@@ -107,7 +114,8 @@ public class AccountCreationTest {
 			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
 			account.setUser(user);
-			account.setAccountType("Checkings");
+			//account.setAccountType("Checkings");
+			account.setAccountType(AccountType.CHECKINGS);
 			account.setBalance(200l);
 			account.setCreateOn(LocalDateTime.now());
 			accountRepo.save(account);
@@ -130,7 +138,8 @@ public class AccountCreationTest {
 			userRepo.save(user);
 			AccountCreation account = new AccountCreation();
 			account.setUser(user);
-			account.setAccountType("Savings");
+			//account.setAccountType("Savings");
+			account.setAccountType(AccountType.CHECKINGS);
 			account.setBalance(1000l);
 			account.setCreateOn(LocalDateTime.now());
 			accountRepo.save(account);
@@ -155,14 +164,16 @@ public class AccountCreationTest {
 			AccountCreation account = new AccountCreation();
 			//user.setPassword("Test123");
 			account.setUser(user);
-			account.setAccountType("Checkings");
+			//account.setAccountType("Checkings");
+			account.setAccountType(AccountType.CHECKINGS);
 			account.setBalance(accountBalance);
 			account.setCreateOn(time);
 			accountRepo.save(account);
 			
 			AccountCreation account1 = new AccountCreation();
 			account1.setUser(user);
-			account1.setAccountType("Checkings");
+			//account1.setAccountType("Checkings");
+			account.setAccountType(AccountType.CHECKINGS);
 			account1.setBalance(100l);
 			account1.setCreateOn(LocalDateTime.now());
 			
