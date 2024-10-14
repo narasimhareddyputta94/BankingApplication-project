@@ -1,6 +1,7 @@
 package com.example.Banking.application.accountManagement;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,45 +23,90 @@ public class AccountCreationTest {
 	@DisplayName("Test Creating An Account")
 	@Test
 	public void testAccountCreation() {
-		long  accountId = 1;
+		long initialCount = accountRepo.count();
 		long accountBalance = 1000;
-		User user = new User();
+		//User user = new User();
 		LocalDateTime time = LocalDateTime.now();
 		AccountCreation account = new AccountCreation();
-		user.setPassword("Test123");
-		
-		account.setUser(user);
-		account.setAccountId(accountId);
+		//user.setPassword("Test123");
+		//account.setUser(user);
 		account.setAccountType("Checkings");
 		account.setBalance(accountBalance);
 		account.setCreateOn(time);
-		String expectedToString = "AccountCreation(accountId=1, user=" + user + ", accountType=Checkings, balance=1000, createOn=" + time + ")";
-		assertEquals(expectedToString, account.toString());
+		accountRepo.save(account);
+		long finalCount = accountRepo.count();
 		
 		assertEquals("Checkings", account.getAccountType());
 		assertEquals(accountBalance, account.getBalance());
 		assertEquals(time, account.getCreateOn());
-		assertEquals(user, account.getUser());
+		//assertEquals(user, account.getUser());
+		assertEquals(initialCount + 1, finalCount);
 	}
 
 		@DisplayName("Test Account Creation With Missing Data")
 		@Test
-		public void testMissingUser() {
-		        long initialCount = accountRepo.count();  
+		public void testMissingData() {
+		        long initialCount = accountRepo.count(); 
 		        long accountBalance = 1000;
 		        AccountCreation account = new AccountCreation();
-		        account.setAccountId(initialCount + 1);
-		        account.setAccountType("Checkings");
+		        //account.setAccountId(initialCount + 1);
+		       // account.setAccountType("Checkings");
 		        account.setBalance(accountBalance);
 		        account.setCreateOn(LocalDateTime.now());
 
 		        assertThrows(Exception.class, () -> {
 		            accountRepo.save(account); 
 		        });
-
-		        long finalCount = accountRepo.count(); 
-		        assertEquals(initialCount, finalCount);
+		        
+		        
+		        
 		    }
+		
+		@DisplayName("Test Generated Id Value")
+		@Test
+		public void testGeneratedId() {
+			 long accountId = 0;
+			 AccountCreation account = new AccountCreation();
+			 account.setAccountType("Savings");
+			 account.setBalance(1000L);
+			 account.setCreateOn(LocalDateTime.now());
+			 accountRepo.save(account);
+			 Long generatedId = account.getAccountId();
+			 
+			 assertNotEquals(accountId, generatedId );
+		}
+		
+		@DisplayName("Test Deleting Account")
+		@Test
+		public void testDeleteAccount() {
+			AccountCreation account = new AccountCreation();
+			account.setAccountType("Checkings");
+			account.setBalance(200l);
+			account.setCreateOn(LocalDateTime.now());
+			accountRepo.save(account);
+			long firstAccountNumb = accountRepo.count();
+			accountRepo.delete(account);
+			long secondAccountNumb = accountRepo.count();
+			
+			assertEquals(firstAccountNumb-1, secondAccountNumb);
+			
+		}
+		
+		@DisplayName("Test Updating Account")
+		@Test
+		public void testUpdateAccount() {
+			AccountCreation account = new AccountCreation();
+			account.setAccountType("Savings");
+			account.setBalance(1000l);
+			account.setCreateOn(LocalDateTime.now());
+			accountRepo.save(account);
+			assertEquals(1000l, account.getBalance());
+			account.setBalance(2000l);
+			assertEquals(2000l, account.getBalance());
+			
+		}
+		
+		
 		
 		
 		

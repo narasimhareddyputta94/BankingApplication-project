@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,11 +30,14 @@ public class AccountCreation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
 	
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private User user;
+	//@ManyToOne
+	//@JoinColumn(name = "userId")
+	//private User user;
+	@NotNull(message = "Account type is required")
 	private String accountType;
+	@NotNull(message = "Balance is required")
 	private Long balance;
+	@NotNull(message = "Creation date is required")
 	private LocalDateTime createOn;
 
 	}
