@@ -1,4 +1,4 @@
-package com.example.Banking.application.Email_Notifications;
+package com.example.Banking.application.emailNotifications;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;

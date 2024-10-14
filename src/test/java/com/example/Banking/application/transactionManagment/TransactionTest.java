@@ -1,6 +1,6 @@
-package com.example.Banking.application.Transaction_Managment;
+package com.example.Banking.application.transactionManagment;
 
-import com.example.Banking.application.Transaction_Management.Transaction;
+import com.example.Banking.application.transactionManagement.Transaction;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;

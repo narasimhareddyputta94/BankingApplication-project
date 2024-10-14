@@ -1,9 +1,10 @@
-package com.example.Banking.application.Transaction_Management;
-import java.time.LocalDateTime;
+package com.example.Banking.application.emailNotifications;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -16,18 +17,12 @@ import lombok.NoArgsConstructor;
  * to build and maintain classes with less boilerplate code.
  */
 
-public class Transaction {
-    private Long transactionId;
-    private Long fromAccountId;
-    private Long toAccountId;
-    private Double amount;
-    private TransactionType type;
-    private LocalDateTime transactionDate;
-    private String description;
+public class Notification {
+    private Long notificationId;
+    private Long accountId;
+    private String emailAddress;
+    private String subject;
+    private String messageBody;
+    private LocalDateTime sentDate;
 
-    // Enum for transaction type
-    public enum TransactionType {
-        TRANSFER, DEPOSIT, WITHDRAWAL
-    }
 }
-

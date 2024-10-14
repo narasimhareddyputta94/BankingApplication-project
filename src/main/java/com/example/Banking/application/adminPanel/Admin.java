@@ -1,4 +1,4 @@
-package com.example.Banking.application.Admin_Panel;
+package com.example.Banking.application.adminPanel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
