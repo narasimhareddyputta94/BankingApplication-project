@@ -1,46 +1,45 @@
 package com.example.Banking.application.adminPanel;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AdminTest {
 
     @Test
-    public void testAdminConstructorAndGetters() {
-        // Create an Admin object using constructor
-        Admin admin = new Admin(1L, "adminUser", "password123");
+    void testAdminConstructorAndGetters() {
+        // Using the all-args constructor
+        Admin admin = new Admin(1L, "adminUser", "securePassword");
 
-        // Test if values are correctly set
         assertEquals(1L, admin.getAdminId());
         assertEquals("adminUser", admin.getUsername());
-        assertEquals("password123", admin.getPassword());
+        assertEquals("securePassword", admin.getPassword());
     }
 
     @Test
-    public void testAdminSetters() {
-        // Create an Admin object and modify fields
+    void testAdminSetters() {
+        // Using no-args constructor and setters
         Admin admin = new Admin();
-        admin.setAdminId(2L);
-        admin.setUsername("newUser");
-        admin.setPassword("newPassword");
+        admin.setAdminId(1L);
+        admin.setUsername("adminUser");
+        admin.setPassword("securePassword");
 
-        // Verify updated values
-        assertEquals(2L, admin.getAdminId());
-        assertEquals("newUser", admin.getUsername());
-        assertEquals("newPassword", admin.getPassword());
+        assertEquals(1L, admin.getAdminId());
+        assertEquals("adminUser", admin.getUsername());
+        assertEquals("securePassword", admin.getPassword());
     }
 
     @Test
-    public void testAdminBuilder() {
-        // Create an Admin object using the builder
+    void testAdminBuilder() {
+        // Using Lombok builder
         Admin admin = Admin.builder()
-                .adminId(3L)
-                .username("builderUser")
-                .password("builderPassword")
+                .adminId(1L)
+                .username("adminUser")
+                .password("securePassword")
                 .build();
 
-        // Verify the values
-        assertEquals(3L, admin.getAdminId());
-        assertEquals("builderUser", admin.getUsername());
-        assertEquals("builderPassword", admin.getPassword());
+        assertEquals(1L, admin.getAdminId());
+        assertEquals("adminUser", admin.getUsername());
+        assertEquals("securePassword", admin.getPassword());
     }
 }

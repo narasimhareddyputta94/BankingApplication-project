@@ -1,4 +1,4 @@
-package com.example.Banking.application.Authentication;
+package com.example.Banking.application.authentication;
 
 import org.springframework.stereotype.Service;
 

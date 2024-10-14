@@ -1,11 +1,9 @@
-package com.example.Banking.application.Authentication;
+package com.example.Banking.application.authentication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.Banking.application.Authentication.User;
-import com.example.Banking.application.Authentication.UserService;
 import static org.junit.jupiter.api.Assertions.*;
 
 

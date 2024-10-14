@@ -1,12 +1,8 @@
-package com.example.Banking.application.Authentication;
+package com.example.Banking.application.authentication;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
-
+@Table(name = "app_users")
 @Entity
 public class User {
 
