@@ -10,4 +10,4 @@
  * 
  * @author Shashank Datt
  */
-package com.example.Banking.application.Authentication;
+package com.example.Banking.application.authentication;

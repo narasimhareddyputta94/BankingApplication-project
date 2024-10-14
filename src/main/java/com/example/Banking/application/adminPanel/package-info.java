@@ -11,4 +11,4 @@
  *
  * @author Narasimha Reddy
  */
-package com.example.Banking.application.Admin_Panel;
+package com.example.Banking.application.adminPanel;
