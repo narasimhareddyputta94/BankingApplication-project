@@ -12,4 +12,4 @@
  *
  * @author Narasimha Reddy
  */
-package com.example.Banking.application.Email_Notifications;
+package com.example.Banking.application.emailNotifications;
