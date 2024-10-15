@@ -21,10 +21,31 @@ public class TransactionService {
         transaction.setAccountNumber(accountNumber);
         transaction.setAmount(amount);
         transaction.setType(type);
-        transaction.setStatus(TransactionStatus.SUCCESS); // Assuming the transaction is successful
+        transaction.setStatus(TransactionStatus.SUCCESS); // Assuming transaction is successful
         transaction.setTimestamp(LocalDateTime.now());
 
         return transactionRepository.save(transaction);
+    }
+
+    // Example method for deposits (which would be a CREDIT)
+    @Transactional
+    public Transaction depositCash(String accountNumber, BigDecimal amount) {
+        return createTransaction(accountNumber, amount, TransactionType.CREDIT);
+    }
+
+    // Example method for withdrawals (which would be a DEBIT)
+    @Transactional
+    public Transaction withdrawCash(String accountNumber, BigDecimal amount) {
+        return createTransaction(accountNumber, amount, TransactionType.DEBIT);
+    }
+
+    // Example method for transfers
+    @Transactional
+    public Transaction transferFunds(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount) {
+        // Debit from source account
+        createTransaction(sourceAccountNumber, amount, TransactionType.DEBIT);
+        // Credit to target account
+        return createTransaction(targetAccountNumber, amount, TransactionType.CREDIT);
     }
 
     @Transactional(readOnly = true)

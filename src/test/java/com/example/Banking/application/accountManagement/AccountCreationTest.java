@@ -12,9 +12,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.Banking.application.Authentication.User;
-import com.example.Banking.application.Authentication.UserRepo;
-import com.example.Banking.application.Authentication.UserService;
+import com.example.Banking.application.authentication.User;
+import com.example.Banking.application.authentication.UserRepo;
+import com.example.Banking.application.authentication.UserService;
 import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
 
 @DataJpaTest
