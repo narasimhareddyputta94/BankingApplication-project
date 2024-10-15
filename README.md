@@ -12,6 +12,13 @@ This repository contains the code for a banking application, developed as part o
 
 ---
 
+## Test Cases Passed Screenshot
+
+### Screenshot:
+![Test Cases Passed Screenshot](src/main/resources/Images/Screenshot%202024-10-14%20232704.png)
+
+---
+
 ## Prototype Images
 
 Here are the prototype images of the application:
