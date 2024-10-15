@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-
+    List<Transaction> findByAccountNumberAndTimestampBetween(String accountNumber, LocalDateTime startDate, LocalDateTime endDate);
 }

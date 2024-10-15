@@ -8,13 +8,15 @@ public class TransactionTypeTest {
 
     @Test
     public void testEnumValues() {
-        assertEquals(TransactionType.DEPOSIT, TransactionType.valueOf("DEPOSIT"));
-        assertEquals(TransactionType.WITHDRAWAL, TransactionType.valueOf("WITHDRAWAL"));
-        assertEquals(TransactionType.TRANSFER, TransactionType.valueOf("TRANSFER"));
+        // Test for valid enum values
+        assertEquals(TransactionType.CREDIT, TransactionType.valueOf("CREDIT"));
+        assertEquals(TransactionType.DEBIT, TransactionType.valueOf("DEBIT"));
+
     }
 
     @Test
     public void testEnumInvalidValue() {
+        // Test for an invalid enum value
         assertThrows(IllegalArgumentException.class, () -> {
             TransactionType.valueOf("INVALID_TYPE");
         });

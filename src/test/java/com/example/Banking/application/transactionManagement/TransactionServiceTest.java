@@ -33,7 +33,7 @@ class TransactionServiceTest {
         // Arrange
         String accountNumber = "1234567890";
         BigDecimal amount = BigDecimal.valueOf(100);
-        TransactionType type = TransactionType.DEPOSIT;
+        TransactionType type = TransactionType.CREDIT; // Updated to CREDIT
         Transaction transaction = new Transaction(1L, accountNumber, amount, TransactionStatus.SUCCESS, type, LocalDateTime.now());
 
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
@@ -52,8 +52,8 @@ class TransactionServiceTest {
     @Test
     void testGetAllTransactions() {
         // Arrange
-        Transaction transaction1 = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.DEPOSIT, LocalDateTime.now());
-        Transaction transaction2 = new Transaction(2L, "456", BigDecimal.valueOf(200), TransactionStatus.SUCCESS, TransactionType.WITHDRAWAL, LocalDateTime.now());
+        Transaction transaction1 = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.CREDIT, LocalDateTime.now());
+        Transaction transaction2 = new Transaction(2L, "456", BigDecimal.valueOf(200), TransactionStatus.SUCCESS, TransactionType.DEBIT, LocalDateTime.now());
 
         when(transactionRepository.findAll()).thenReturn(Arrays.asList(transaction1, transaction2));
 
@@ -70,7 +70,7 @@ class TransactionServiceTest {
     @Test
     void testGetTransactionById() {
         // Arrange
-        Transaction transaction = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.DEPOSIT, LocalDateTime.now());
+        Transaction transaction = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.CREDIT, LocalDateTime.now());
 
         when(transactionRepository.findById(1L)).thenReturn(Optional.of(transaction));
 
