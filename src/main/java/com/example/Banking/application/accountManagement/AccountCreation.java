@@ -3,7 +3,7 @@ package com.example.Banking.application.accountManagement;
 
 import java.time.LocalDateTime;
 
-import com.example.Banking.application.Authentication.User;
+import com.example.Banking.application.authentication.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

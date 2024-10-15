@@ -1,7 +1,6 @@
 package com.example.Banking.application.transactionManagement;
 
 public enum TransactionType {
-    DEPOSIT,
-    WITHDRAWAL,
-    TRANSFER
+    CREDIT,  // Represents deposits and incoming transfers
+    DEBIT    // Represents withdrawals and outgoing transfers
 }
