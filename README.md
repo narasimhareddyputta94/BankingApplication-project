@@ -28,7 +28,7 @@ Here are the prototype images of the application:
 | Noor               | Loan Management                                                |
 | Narasimha Reddy    | Transaction Management, Notifications Management & Admin Panel |
 | Shashank Datt      | Authentication & Authorization                                 |
-
+|Shengyang Guan      | Reporting                                                      |
 ---
 
 ## Conflict Resolution
