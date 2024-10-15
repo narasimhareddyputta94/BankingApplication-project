@@ -5,6 +5,13 @@ This repository contains the code for a banking application, developed as part o
 
 ---
 
+## Working Code Screenshot
+
+### Screenshot:
+![Working Code Screenshot](src/main/resources/Images/Screenshot%202024-10-14%20231652.png)
+
+---
+
 ## Prototype Images
 
 Here are the prototype images of the application:
@@ -18,9 +25,6 @@ Here are the prototype images of the application:
 ---
 
 ## Project Members and Responsibilities
----
-
-## Project Members and Responsibilities
 
 | **Member**         | **Responsibilities**                                           |
 |--------------------|----------------------------------------------------------------|
@@ -28,7 +32,8 @@ Here are the prototype images of the application:
 | Noor               | Loan Management                                                |
 | Narasimha Reddy    | Transaction Management, Notifications Management & Admin Panel |
 | Shashank Datt      | Authentication & Authorization                                 |
-|Shengyang Guan      | Reporting                                                      |
+| Shengyang Guan     | Reporting                                                      |
+
 ---
 
 ## Conflict Resolution
@@ -63,27 +68,27 @@ The team will communicate and collaborate using the following platforms:
 The following coding standards have been adopted to ensure consistency, readability, and maintainability of the codebase:
 
 1. **Java Naming Conventions**:
-    - Classes and interfaces use CamelCase (e.g., `AccountService`).
-    - Variables and methods use lowerCamelCase (e.g., `getAccountDetails`).
-    - Constants are written in UPPERCASE with underscores separating words (e.g., `MAX_TRANSACTION_LIMIT`).
+   - Classes and interfaces use CamelCase (e.g., `AccountService`).
+   - Variables and methods use lowerCamelCase (e.g., `getAccountDetails`).
+   - Constants are written in UPPERCASE with underscores separating words (e.g., `MAX_TRANSACTION_LIMIT`).
 
 2. **Indentation and Formatting**:
-    - Use 4 spaces for indentation (no tabs).
-    - Properly format code to ensure readability, including consistent use of whitespace around operators and parentheses.
+   - Use 4 spaces for indentation (no tabs).
+   - Properly format code to ensure readability, including consistent use of whitespace around operators and parentheses.
 
 3. **Commenting and Documentation**:
-    - All public methods must include Javadoc comments explaining their purpose and usage.
-    - Inline comments should be used sparingly and only when the code’s purpose is not immediately obvious.
+   - All public methods must include Javadoc comments explaining their purpose and usage.
+   - Inline comments should be used sparingly and only when the code’s purpose is not immediately obvious.
 
 4. **Exception Handling**:
-    - Use custom exception classes where applicable to handle business logic errors.
-    - Avoid generic exception catches such as `catch (Exception e)` unless absolutely necessary.
+   - Use custom exception classes where applicable to handle business logic errors.
+   - Avoid generic exception catches such as `catch (Exception e)` unless absolutely necessary.
 
 5. **Unit Testing**:
-    - All methods must be covered by unit tests using JUnit.
-    - Test classes follow the same package structure as the main codebase (e.g., `src/test/java/...`).
-    - Tests should follow the Arrange-Act-Assert (AAA) pattern to ensure clarity.
+   - All methods must be covered by unit tests using JUnit.
+   - Test classes follow the same package structure as the main codebase (e.g., `src/test/java/...`).
+   - Tests should follow the Arrange-Act-Assert (AAA) pattern to ensure clarity.
 
 6. **Code Reviews**:
-    - All pull requests must be reviewed by at least one team member before merging.
-    - Code reviews focus on design, readability, maintainability, and adherence to coding standards.
+   - All pull requests must be reviewed by at least one team member before merging.
+   - Code reviews focus on design, readability, maintainability, and adherence to coding standards.
