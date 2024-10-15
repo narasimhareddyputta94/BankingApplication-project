@@ -16,11 +16,18 @@ public class User {
 
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
+
+	@Column(name = "username", nullable = false)
     private String username;
-    private String email;
-    private String password;
+
+	@Column(name = "email", nullable = false)
+	private String email;
+
+	@Column(name = "password", nullable = false)
+	private String password;
     
     //using manually because had some issues with lombok
 	public String getUsername() {
@@ -35,13 +42,16 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public void setEmail(String email) {
+	public void setEmail(String email)
+	{
 		this.email = email;
 	}
-	public void setPassword(String password) {
+	public void setPassword(String password)
+	{
 		this.password = password;
 	}
-	public long getId() {
+	public long getId()
+	{
 		return id;
 	}
 	
