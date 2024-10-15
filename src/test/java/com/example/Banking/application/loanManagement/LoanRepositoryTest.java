@@ -1,12 +1,11 @@
 package com.example.Banking.application.loanManagement;
 
 import com.example.Banking.application.authentication.User;
+import com.example.Banking.application.authentication.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,20 +20,29 @@ public class LoanRepositoryTest {
     @Autowired
     private LoanRepository loanRepository;
 
-    @MockBean
-    private User user;
+    @Autowired
+    private UserRepo userRepository; // Inject the UserRepository to save the User entity
 
+    private User user;
     private Loan loan;
 
     @BeforeEach
     void setUp() {
+        // Create and save a User entity
+        user = new User();
+        user.setUsername("testUser");
+        user.setPassword("testPass");
+        user.setEmail("test@example.com");
+        userRepository.save(user); // Save the user to the database
+
+        // Create a Loan entity
         loan = new Loan();
         loan.setLoanType("Home Loan");
         loan.setLoanAmount(50000.0);
         loan.setLoanDurationInMonths(60);
         loan.setInterestRate(3.5);
         loan.setLoanStatus(LoanStatus.PENDING);
-        loan.setUser(user);
+        loan.setUser(user); // Set the persisted user
     }
 
     @Test
@@ -60,7 +68,7 @@ public class LoanRepositoryTest {
         loan2.setLoanDurationInMonths(12);
         loan2.setInterestRate(5.0);
         loan2.setLoanStatus(LoanStatus.PENDING);
-        loan2.setUser(user);
+        loan2.setUser(user); // Set the same user
 
         loanRepository.saveAll(Arrays.asList(loan, loan2));
         List<Loan> loans = loanRepository.findAll();
