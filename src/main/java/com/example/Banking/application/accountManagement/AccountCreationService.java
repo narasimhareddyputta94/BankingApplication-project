@@ -19,7 +19,7 @@ public class AccountCreationService {
         log.traceEntry("Enter list");
         var retval = repo.findAll();
         log.traceExit("Exit list", retval);        
-        return (List<AccountCreation>) retval;
+        return retval;
     }
 	
 	public AccountCreation save(AccountCreation account) {
