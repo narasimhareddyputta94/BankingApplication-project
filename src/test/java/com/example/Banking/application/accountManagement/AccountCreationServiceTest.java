@@ -1,5 +1,7 @@
 package com.example.Banking.application.accountManagement;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.security.test.context.support.WithMockUser;
+
 
 
 @SpringBootTest
@@ -21,8 +25,9 @@ public class AccountCreationServiceTest {
 	private MockMvc mvc;
 	private static String url = "/api/accounts";
 	
-	 @Test
-	    public void getAllAirports() throws Exception {
+	@Test
+	@WithMockUser(username = "root", password = "WelcomeToBanWorld!")
+	public void getAll() throws Exception {
 			// when - action
 			ResultActions response = mvc.perform(MockMvcRequestBuilders.get(url));
 
@@ -32,7 +37,10 @@ public class AccountCreationServiceTest {
 			// then - verify the output
 			response.andExpect(MockMvcResultMatchers.status().isOk());
 			response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(recordCount)));
+			
 	    }
+	 
+	 
 
 
 }
