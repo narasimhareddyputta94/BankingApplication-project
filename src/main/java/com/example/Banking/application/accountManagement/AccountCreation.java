@@ -36,6 +36,7 @@ public class AccountCreation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
