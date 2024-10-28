@@ -1,14 +1,17 @@
 package com.example.Banking.application.authentication;
+
 import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
 import com.example.Banking.application.accountManagement.AccountCreation;
-
+import com.example.Banking.application.transactionManagement.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@Table(name= "Users")
+@Table(name = "Users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +19,6 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "username", nullable = false)
@@ -38,4 +40,7 @@ public class User {
 	@OneToOne
 	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
 	private AccountCreation account;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Transaction> transactions;
 }
