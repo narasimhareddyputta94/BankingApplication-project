@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.Banking.application.authentication.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,6 +57,7 @@ public class AccountCreation {
         CHECKINGS,
         SAVINGS
         }
+	
 
 	}
 
