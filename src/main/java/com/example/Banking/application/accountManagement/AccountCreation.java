@@ -27,17 +27,20 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "Accounts", uniqueConstraints = {
-	    @UniqueConstraint(columnNames = {"userId", "accountType"}) 
+	    @UniqueConstraint(columnNames = {"userId", "accountType"}),
+		@UniqueConstraint(columnNames = {"accountNumber"})
 	})
 
 //@Table(name = "Accounts")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AccountCreation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
@@ -52,6 +55,10 @@ public class AccountCreation {
 	@NotNull(message = "Creation date is required")
 	private LocalDate createOn;
 	// CHeck changing LocalDateTime to LocalDate, check testing cases for errors
+
+	@NotNull
+	private String accountNumber;
+
 	
 	public enum AccountType {
         CHECKINGS,
@@ -59,7 +66,14 @@ public class AccountCreation {
         }
 	
 
+	public AccountType getAccountType() {
+		return accountType;
 	}
+
+	public void setAccountType(AccountType accountType) {
+		this.accountType = accountType;
+	}
+}
 
 
 
