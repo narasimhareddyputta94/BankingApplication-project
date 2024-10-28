@@ -1,4 +1,6 @@
 package com.example.Banking.application.authentication;
+import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
+import com.example.Banking.application.accountManagement.AccountCreation;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,4 +27,15 @@ public class User {
 
 	@Column(name = "password", nullable = false)
 	private String password;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "account_type", nullable = false)
+	private AccountType accountType;
+
+	@Column(name = "balance", nullable = false)
+	private long balance;
+
+	@OneToOne
+	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
+	private AccountCreation account;
 }

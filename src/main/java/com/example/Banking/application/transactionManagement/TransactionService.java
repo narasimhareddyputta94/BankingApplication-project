@@ -27,24 +27,19 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    // Example method for deposits (which would be a CREDIT)
     @Transactional
     public Transaction depositCash(String accountNumber, BigDecimal amount) {
         return createTransaction(accountNumber, amount, TransactionType.CREDIT);
     }
 
-    // Example method for withdrawals (which would be a DEBIT)
     @Transactional
     public Transaction withdrawCash(String accountNumber, BigDecimal amount) {
         return createTransaction(accountNumber, amount, TransactionType.DEBIT);
     }
 
-    // Example method for transfers
     @Transactional
     public Transaction transferFunds(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount) {
-        // Debit from source account
         createTransaction(sourceAccountNumber, amount, TransactionType.DEBIT);
-        // Credit to target account
         return createTransaction(targetAccountNumber, amount, TransactionType.CREDIT);
     }
 
@@ -61,5 +56,10 @@ public class TransactionService {
     @Transactional
     public void deleteTransaction(Long id) {
         transactionRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Transaction> getTransactionsByAccountAndDateRange(String accountNumber, LocalDateTime startDate, LocalDateTime endDate) {
+        return transactionRepository.findByAccountNumberAndTimestampBetween(accountNumber, startDate, endDate);
     }
 }
