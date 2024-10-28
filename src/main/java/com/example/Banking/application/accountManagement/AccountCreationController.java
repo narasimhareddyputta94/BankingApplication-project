@@ -20,9 +20,10 @@ import org.springframework.validation.FieldError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -44,12 +45,23 @@ public class AccountCreationController {
 	
 	 @PostMapping
 	    @Operation(summary = "Save the Account to the database and return the accountId")
-	    public long save(AccountCreation account) {
+	    public long createAccount(@Valid @RequestBody AccountCreation account) {
+		 System.out.println(account);
 	        log.traceEntry("enter save", account);
 	        service.save(account);
-	        log.traceExit("exit save", account);        
+	        log.traceExit("exit save", account);
+	        System.out.println(account);
 	        return account.getAccountId();
 	    }
+	 
+//	 @PostMapping("/validated")
+//	    @Operation(summary = "Save the Account and returns the Account ID")
+//	    public ResponseEntity<String> validatedSave(@Valid @RequestBody AccountCreation account) {
+//	        log.traceEntry("enter save", account);
+//	        service.save(account);
+//	        log.traceExit("exit save", account);
+//	        return ResponseEntity.ok("new id is " + account.getAccountId());
+//	    }
 	 
 	 @DeleteMapping
 	    @Operation(summary = "Delete the account based on the id given")

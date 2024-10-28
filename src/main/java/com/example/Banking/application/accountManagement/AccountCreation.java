@@ -1,11 +1,14 @@
 package com.example.Banking.application.accountManagement;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.Banking.application.authentication.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,11 +44,13 @@ public class AccountCreation {
 	private User user;
 	@NotNull(message = "Account type is required")
 	//private String accountType;
+	//@Enumerated(EnumType.STRING)
 	private AccountType accountType;
 	@NotNull(message = "Balance is required")
 	private Long balance;
 	@NotNull(message = "Creation date is required")
-	private LocalDateTime createOn;
+	private LocalDate createOn;
+	// CHeck changing LocalDateTime to LocalDate, check testing cases for errors
 	
 	public enum AccountType {
         CHECKINGS,
