@@ -2,22 +2,31 @@ package com.example.Banking.application.adminPanel;
 
 import com.example.Banking.application.authentication.User;
 import com.example.Banking.application.authentication.UserRepo;
+import com.example.Banking.application.transactionManagement.Transaction;
+import com.example.Banking.application.transactionManagement.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
-
-    @Autowired
     private UserRepo userRepo;
 
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    @Autowired
+    private TransactionRepository transactionRepository;
 
+    // Retrieve all users with account and transaction details
+    public List<User> getAllUsersWithTransactions() {
+        return userRepo.findAll();
+    }
+
+    // Retrieve transactions for a specific user
+    public List<Transaction> getUserTransactions(Long userId) {
+        Optional<User> user = userRepo.findById(userId);
+        return user.map(User::getTransactions).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
