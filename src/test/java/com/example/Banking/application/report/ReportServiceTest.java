@@ -17,7 +17,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+/**
+ * Unit tests for the ReportService class.
+ * These tests ensure that report generation behaves correctly 
+ * under different scenarios, including handling transactions 
+ * and managing empty data sets.
+ */
 class ReportServiceTest {
 
     @Mock
@@ -30,7 +35,11 @@ class ReportServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+/**
+     * Test for generating a report with existing transactions.
+     * This verifies that the report correctly summarizes total income,
+     * expenses, and calculates the remaining balance.
+     */
     @Test
     void testGenerateReport() {
         // Arrange
@@ -57,7 +66,12 @@ class ReportServiceTest {
         assertEquals(BigDecimal.valueOf(50), summary.getTotalExpenses());
         assertEquals(BigDecimal.valueOf(50), summary.getRemainingBalance());
     }
-
+/**
+     * Test for generating a report when no transactions are found.
+     * This verifies that the report generation method returns zeroed
+     * financial values for accounts with no transaction history
+     * in the given date range.
+     */
     @Test
     void testGenerateReport_NoTransactions() {
         // Arrange
