@@ -1,4 +1,6 @@
 package com.example.Banking.application.authentication;
+import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
+import com.example.Banking.application.accountManagement.AccountCreation;
 
 import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
 import com.example.Banking.application.accountManagement.AccountCreation;
@@ -41,6 +43,8 @@ public class User {
 	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
 	private AccountCreation account;
 
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Transaction> transactions;
+
 }

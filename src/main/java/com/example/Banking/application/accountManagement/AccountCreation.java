@@ -23,12 +23,14 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "Accounts", uniqueConstraints = {
-	    @UniqueConstraint(columnNames = {"userId", "accountType"}) 
+	    @UniqueConstraint(columnNames = {"userId", "accountType"}),
+		@UniqueConstraint(columnNames = {"accountNumber"})
 	})
 
 //@Table(name = "Accounts")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AccountCreation {
 
 	@Id
@@ -47,13 +49,22 @@ public class AccountCreation {
 	private Long balance;
 	@NotNull(message = "Creation date is required")
 	private LocalDateTime createOn;
+	@NotNull
+	private String accountNumber;
 	
 	public enum AccountType {
         CHECKINGS,
         SAVINGS
         }
 
+	public AccountType getAccountType() {
+		return accountType;
 	}
+
+	public void setAccountType(AccountType accountType) {
+		this.accountType = accountType;
+	}
+}
 
 
 
