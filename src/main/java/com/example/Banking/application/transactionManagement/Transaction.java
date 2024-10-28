@@ -1,5 +1,6 @@
 package com.example.Banking.application.transactionManagement;
 
+import com.example.Banking.application.authentication.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,5 +36,7 @@ public class Transaction {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
