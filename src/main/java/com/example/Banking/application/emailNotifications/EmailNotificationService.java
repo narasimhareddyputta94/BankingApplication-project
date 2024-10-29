@@ -21,22 +21,18 @@ public class EmailNotificationService {
     public EmailNotification sendEmailNotification(String recipientEmail, String subject, String content) {
         EmailNotification emailNotification = new EmailNotification(recipientEmail, subject, content, EmailStatus.SENT);
 
-        // Create the email message
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);
         message.setSubject(subject);
         message.setText(content);
 
         try {
-            // Send the email
             mailSender.send(message);
         } catch (Exception e) {
-            // Update status to FAILED and set failure reason
             emailNotification.setStatus(EmailStatus.FAILED);
             emailNotification.setContent("Failed to send email due to: " + e.getMessage());
         }
 
-        // Save and return the emailNotification, even if it failed
         return emailNotificationRepository.save(emailNotification);
     }
 

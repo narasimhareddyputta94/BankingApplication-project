@@ -14,7 +14,6 @@ public class FinancialSummary {
         this.remainingBalance = remainingBalance;
     }
 
-    // Custom toString() method
     @Override
     public String toString() {
         return "FinancialSummary{" +

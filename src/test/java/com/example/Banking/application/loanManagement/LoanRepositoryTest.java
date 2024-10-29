@@ -22,29 +22,27 @@ public class LoanRepositoryTest {
     private LoanRepository loanRepository;
 
     @Autowired
-    private UserRepo userRepository; // Inject the UserRepository to save the User entity
+    private UserRepo userRepository;
 
     private User user;
     private Loan loan;
 
     @BeforeEach
     void setUp() {
-        // Create and save a User entity
         user = new User();
         user.setUsername("testUser");
         user.setPassword("testPass");
         user.setEmail("test@example.com");
-        user.setAccountType(AccountCreation.AccountType.SAVINGS); // Set account type here
-        userRepository.save(user); // Save the user to the database
+        user.setAccountType(AccountCreation.AccountType.SAVINGS);
+        userRepository.save(user);
 
-        // Create a Loan entity
         loan = new Loan();
         loan.setLoanType("Home Loan");
         loan.setLoanAmount(50000.0);
         loan.setLoanDurationInMonths(60);
         loan.setInterestRate(3.5);
         loan.setLoanStatus(LoanStatus.PENDING);
-        loan.setUser(user); // Set the persisted user
+        loan.setUser(user);
     }
 
 

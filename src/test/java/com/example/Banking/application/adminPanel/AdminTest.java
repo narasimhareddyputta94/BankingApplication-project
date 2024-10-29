@@ -8,7 +8,7 @@ public class AdminTest {
 
     @Test
     public void testAdminBuilder() {
-        // Using builder to create an Admin object
+
         Admin admin = Admin.builder()
                 .adminId(1L)
                 .username("adminUser")
@@ -23,7 +23,7 @@ public class AdminTest {
 
     @Test
     public void testAdminAllArgsConstructor() {
-        // Using all-args constructor to create an Admin object
+
         Admin admin = new Admin(2L, "secondAdmin", "anotherPassword");
 
         assertNotNull(admin);
@@ -34,7 +34,7 @@ public class AdminTest {
 
     @Test
     public void testAdminNoArgsConstructor() {
-        // Using no-args constructor to create an Admin object
+
         Admin admin = new Admin();
 
         assertNotNull(admin);

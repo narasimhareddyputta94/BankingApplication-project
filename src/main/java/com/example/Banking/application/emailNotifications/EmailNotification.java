@@ -41,7 +41,6 @@ public class EmailNotification {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    // Custom constructor without ID and timestamp
     public EmailNotification(String recipientEmail, String subject, String content, EmailStatus status) {
         this.recipientEmail = recipientEmail;
         this.subject = subject;

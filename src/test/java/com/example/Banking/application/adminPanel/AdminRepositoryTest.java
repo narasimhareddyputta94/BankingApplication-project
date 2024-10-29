@@ -28,12 +28,12 @@ public class AdminRepositoryTest {
     @Test
     public void testFindByUsername_WhenUsernameDoesNotExist() {
         Admin foundAdmin = adminRepository.findByUsername("nonexistent");
-        assertNull(foundAdmin);  // Should return null if the username does not exist
+        assertNull(foundAdmin);
     }
 
     @Test
     public void testFindByUsername_WhenUsernameIsNull() {
         Admin foundAdmin = adminRepository.findByUsername(null);
-        assertNull(foundAdmin);  // Expect null as null username shouldn't exist
+        assertNull(foundAdmin);
     }
 }

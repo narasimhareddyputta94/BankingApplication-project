@@ -34,7 +34,6 @@ public class TransactionRepositoryTest {
 
     @BeforeEach
     public void setup() {
-        // Initialize and save User with necessary fields
         testUser = new User();
         testUser.setUsername("testUser");
         testUser.setEmail("testUser@example.com");
@@ -43,7 +42,6 @@ public class TransactionRepositoryTest {
         testUser.setAccountType(AccountType.CHECKINGS); // Ensure account type is set
         userRepository.save(testUser);
 
-        // Initialize and save Account with required fields and reference to User
         testAccount = AccountCreation.builder()
                 .user(testUser)
                 .accountType(AccountType.CHECKINGS)
@@ -52,10 +50,8 @@ public class TransactionRepositoryTest {
                 .accountNumber("123456789")
                 .build();
 
-        // Persist AccountCreation to the database
         testAccount = accountCreationRepository.save(testAccount);
 
-        // Create and save a sample transaction for the user
         Transaction transaction = new Transaction();
         transaction.setAccountNumber(testAccount.getAccountNumber());
         transaction.setAmount(new BigDecimal("100.00"));

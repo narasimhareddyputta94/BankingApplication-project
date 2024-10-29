@@ -41,7 +41,6 @@ public class TransactionServiceTest {
 
     @Test
     public void testCreateTransaction_Success() {
-        // Setup for successful save
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
 
         Transaction result = transactionService.createTransaction("1234567890", BigDecimal.valueOf(100.00), TransactionType.CREDIT, "test@example.com");
@@ -55,7 +54,6 @@ public class TransactionServiceTest {
 
     @Test
     public void testCreateTransaction_Failure() {
-        // Simulate exception on first save to trigger failure handling
         doThrow(new RuntimeException("Database error"))
                 .doAnswer(invocation -> invocation.getArgument(0)) // Return the same transaction on retry save
                 .when(transactionRepository).save(any(Transaction.class));

@@ -19,12 +19,10 @@ public class AdminService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    // Retrieve all users with account and transaction details
     public List<User> getAllUsersWithTransactions() {
         return userRepo.findAll();
     }
 
-    // Retrieve transactions for a specific user
     public List<Transaction> getUserTransactions(Long userId) {
         Optional<User> user = userRepo.findById(userId);
         return user.map(User::getTransactions).orElseThrow(() -> new RuntimeException("User not found"));
