@@ -12,12 +12,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ReportService {
+public class ReportService implements ReportServiceInterface {
 
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Transactional(readOnly = true)
+    @Override
     public FinancialSummary generateReport(LocalDateTime startDate, LocalDateTime endDate, String accountNumber) {
         List<Transaction> transactions = transactionRepository.findByAccountNumberAndTimestampBetween(accountNumber, startDate, endDate);
 
