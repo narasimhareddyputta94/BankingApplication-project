@@ -31,12 +31,15 @@ public class EmailNotificationService {
             // Send the email
             mailSender.send(message);
         } catch (Exception e) {
+            // Update status to FAILED and set failure reason
             emailNotification.setStatus(EmailStatus.FAILED);
             emailNotification.setContent("Failed to send email due to: " + e.getMessage());
         }
 
+        // Save and return the emailNotification, even if it failed
         return emailNotificationRepository.save(emailNotification);
     }
+
 
     public void sendTransactionNotification(String recipientEmail, String accountNumber, String transactionType, String status, BigDecimal amount) {
         String subject = "Transaction " + status + ": " + transactionType;
