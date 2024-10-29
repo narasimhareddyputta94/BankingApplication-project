@@ -1,93 +1,94 @@
-//package com.example.Banking.application.transactionManagement;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDateTime;
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//class TransactionServiceTest {
-//
-//    @Mock
-//    private TransactionRepository transactionRepository;
-//
-//    @InjectMocks
-//    private TransactionService transactionService;
-//
-//    @BeforeEach
-//    void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//    @Test
-//    void testCreateTransaction() {
-//        // Arrange
-//        String accountNumber = "1234567890";
-//        BigDecimal amount = BigDecimal.valueOf(100);
-//        TransactionType type = TransactionType.CREDIT; // Updated to CREDIT
-//        Transaction transaction = new Transaction(1L, accountNumber, amount, TransactionStatus.SUCCESS, type, LocalDateTime.now());
-//
-//        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
-//
-//        // Act
-//        Transaction result = transactionService.createTransaction(accountNumber, amount, type);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals(accountNumber, result.getAccountNumber());
-//        assertEquals(amount, result.getAmount());
-//        assertEquals(TransactionStatus.SUCCESS, result.getStatus());
-//        assertEquals(type, result.getType());
-//    }
-//
-//    @Test
-//    void testGetAllTransactions() {
-//        // Arrange
-//        Transaction transaction1 = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.CREDIT, LocalDateTime.now());
-//        Transaction transaction2 = new Transaction(2L, "456", BigDecimal.valueOf(200), TransactionStatus.SUCCESS, TransactionType.DEBIT, LocalDateTime.now());
-//
-//        when(transactionRepository.findAll()).thenReturn(Arrays.asList(transaction1, transaction2));
-//
-//        // Act
-//        List<Transaction> transactions = transactionService.getAllTransactions();
-//
-//        // Assert
-//        assertNotNull(transactions);
-//        assertEquals(2, transactions.size());
-//        assertEquals("123", transactions.get(0).getAccountNumber());
-//        assertEquals("456", transactions.get(1).getAccountNumber());
-//    }
-//
-//    @Test
-//    void testGetTransactionById() {
-//        // Arrange
-//        Transaction transaction = new Transaction(1L, "123", BigDecimal.valueOf(100), TransactionStatus.SUCCESS, TransactionType.CREDIT, LocalDateTime.now());
-//
-//        when(transactionRepository.findById(1L)).thenReturn(Optional.of(transaction));
-//
-//        // Act
-//        Optional<Transaction> result = transactionService.getTransactionById(1L);
-//
-//        // Assert
-//        assertTrue(result.isPresent());
-//        assertEquals("123", result.get().getAccountNumber());
-//    }
-//
-//    @Test
-//    void testDeleteTransaction() {
-//        // Act
-//        transactionService.deleteTransaction(1L);
-//
-//        // Assert
-//        verify(transactionRepository, times(1)).deleteById(1L);
-//    }
-//}
+package com.example.Banking.application.transactionManagement;
+
+import com.example.Banking.application.emailNotifications.EmailNotificationService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class TransactionServiceTest {
+
+    @Mock
+    private TransactionRepository transactionRepository;
+
+    @Mock
+    private EmailNotificationService emailNotificationService;
+
+    @InjectMocks
+    private TransactionService transactionService;
+
+    private Transaction transaction;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        transaction = new Transaction();
+        transaction.setId(1L);
+        transaction.setAccountNumber("1234567890");
+        transaction.setAmount(BigDecimal.valueOf(100.00));
+        transaction.setStatus(TransactionStatus.SUCCESS);
+        transaction.setType(TransactionType.CREDIT);
+        transaction.setTimestamp(LocalDateTime.now());
+    }
+
+    @Test
+    public void testCreateTransaction_Success() {
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        Transaction result = transactionService.createTransaction("1234567890", BigDecimal.valueOf(100.00), TransactionType.CREDIT, "test@example.com");
+
+        assertNotNull(result);
+        assertEquals(TransactionStatus.SUCCESS, result.getStatus());
+        verify(emailNotificationService).sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
+    }
+
+    @Test
+    public void testCreateTransaction_Failure() {
+        when(transactionRepository.save(any(Transaction.class))).thenThrow(new RuntimeException("Database error"));
+
+        Transaction result = transactionService.createTransaction("1234567890", BigDecimal.valueOf(100.00), TransactionType.CREDIT, "test@example.com");
+
+        assertNotNull(result);
+        assertEquals(TransactionStatus.FAILED, result.getStatus());
+        verify(emailNotificationService).sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "FAILED", BigDecimal.valueOf(100.00));
+    }
+
+    @Test
+    public void testDepositCash() {
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        Transaction result = transactionService.depositCash("1234567890", BigDecimal.valueOf(100.00), "test@example.com");
+
+        assertNotNull(result);
+        assertEquals(TransactionType.CREDIT, result.getType());
+    }
+
+    @Test
+    public void testWithdrawCash() {
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        Transaction result = transactionService.withdrawCash("1234567890", BigDecimal.valueOf(50.00), "test@example.com");
+
+        assertNotNull(result);
+        assertEquals(TransactionType.DEBIT, result.getType());
+    }
+
+    @Test
+    public void testTransferFunds() {
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        transactionService.transferFunds("1234567890", "0987654321", BigDecimal.valueOf(100.00), "source@example.com", "target@example.com");
+
+        verify(transactionRepository, times(2)).save(any(Transaction.class));
+        verify(emailNotificationService).sendTransactionNotification("source@example.com", "1234567890", "DEBIT", "SUCCESS", BigDecimal.valueOf(100.00));
+        verify(emailNotificationService).sendTransactionNotification("target@example.com", "0987654321", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
+    }
+}

@@ -1,100 +1,39 @@
 package com.example.Banking.application.adminPanel;
 
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-@SpringBootTest
+@DataJpaTest
 public class AdminRepositoryTest {
 
-    @Mock
+    @Autowired
     private AdminRepository adminRepository;
 
-    private Admin admin;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        // Initialize the Admin object
-        admin = Admin.builder()
-                .adminId(1L)
-                .username("adminUser")
-                .password("securePassword")
+    @Test
+    public void testFindByUsername_WhenUsernameExists() {
+        Admin admin = Admin.builder()
+                .username("admin1")
+                .password("password1")
                 .build();
-    }
+        adminRepository.save(admin);
 
-    @Test
-    void testFindByUsername() {
-        // Arrange
-        when(adminRepository.findByUsername("adminUser")).thenReturn(admin);
-
-        // Act
-        Admin foundAdmin = adminRepository.findByUsername("adminUser");
-
-        // Assert
+        Admin foundAdmin = adminRepository.findByUsername("admin1");
         assertNotNull(foundAdmin);
-        assertEquals("adminUser", foundAdmin.getUsername());
-        verify(adminRepository, times(1)).findByUsername("adminUser");
     }
 
     @Test
-    void testFindById() {
-        // Arrange
-        when(adminRepository.findById(1L)).thenReturn(Optional.of(admin));
-
-        // Act
-        Optional<Admin> foundAdmin = adminRepository.findById(1L);
-
-        // Assert
-        assertTrue(foundAdmin.isPresent());
-        assertEquals(1L, foundAdmin.get().getAdminId());
-        verify(adminRepository, times(1)).findById(1L);
+    public void testFindByUsername_WhenUsernameDoesNotExist() {
+        Admin foundAdmin = adminRepository.findByUsername("nonexistent");
+        assertNull(foundAdmin);  // Should return null if the username does not exist
     }
 
     @Test
-    void testSaveAdmin() {
-        // Arrange
-        when(adminRepository.save(admin)).thenReturn(admin);
-
-        // Act
-        Admin savedAdmin = adminRepository.save(admin);
-
-        // Assert
-        assertNotNull(savedAdmin);
-        assertEquals("adminUser", savedAdmin.getUsername());
-        verify(adminRepository, times(1)).save(admin);
-    }
-
-    @Test
-    void testDeleteAdmin() {
-        // Act
-        adminRepository.delete(admin);
-
-        // Assert
-        verify(adminRepository, times(1)).delete(admin);
-    }
-
-    @Test
-    void testUpdateAdmin() {
-        // Arrange
-        admin.setPassword("newSecurePassword");
-        when(adminRepository.save(admin)).thenReturn(admin);
-
-        // Act
-        Admin updatedAdmin = adminRepository.save(admin);
-
-        // Assert
-        assertNotNull(updatedAdmin);
-        assertEquals("newSecurePassword", updatedAdmin.getPassword());
-        verify(adminRepository, times(1)).save(admin);
+    public void testFindByUsername_WhenUsernameIsNull() {
+        Admin foundAdmin = adminRepository.findByUsername(null);
+        assertNull(foundAdmin);  // Expect null as null username shouldn't exist
     }
 }

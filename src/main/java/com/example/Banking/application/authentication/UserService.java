@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -37,7 +38,7 @@ public class UserService {
 				.accountType(accountType)
 				.accountNumber(accountNumber)
 				.balance(balance)
-				.createOn(LocalDateTime.now())
+				.createOn(LocalDate.now())
 				.build();
 		AccountCreation saveAccount = accountRepo.save(accountCreation);
 		saveUser.setAccount(saveAccount);
