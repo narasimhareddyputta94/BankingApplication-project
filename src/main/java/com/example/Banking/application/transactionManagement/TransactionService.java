@@ -35,9 +35,11 @@ public class TransactionService {
         } catch (Exception e) {
             transaction.setStatus(TransactionStatus.FAILED);
             emailNotificationService.sendTransactionNotification(recipientEmail, accountNumber, type.name(), "FAILED", amount);
-            return transactionRepository.save(transaction);
+            transactionRepository.save(transaction);  // Save the failed transaction state
+            return transaction;
         }
     }
+
 
     @Transactional
     public Transaction depositCash(String accountNumber, BigDecimal amount, String recipientEmail) {

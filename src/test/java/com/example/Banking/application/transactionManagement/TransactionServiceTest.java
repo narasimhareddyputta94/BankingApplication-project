@@ -9,9 +9,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TransactionServiceTest {
@@ -41,25 +41,34 @@ public class TransactionServiceTest {
 
     @Test
     public void testCreateTransaction_Success() {
+        // Setup for successful save
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
 
         Transaction result = transactionService.createTransaction("1234567890", BigDecimal.valueOf(100.00), TransactionType.CREDIT, "test@example.com");
 
         assertNotNull(result);
         assertEquals(TransactionStatus.SUCCESS, result.getStatus());
-        verify(emailNotificationService).sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
     }
 
     @Test
     public void testCreateTransaction_Failure() {
-        when(transactionRepository.save(any(Transaction.class))).thenThrow(new RuntimeException("Database error"));
+        // Simulate exception on first save to trigger failure handling
+        doThrow(new RuntimeException("Database error"))
+                .doAnswer(invocation -> invocation.getArgument(0)) // Return the same transaction on retry save
+                .when(transactionRepository).save(any(Transaction.class));
 
         Transaction result = transactionService.createTransaction("1234567890", BigDecimal.valueOf(100.00), TransactionType.CREDIT, "test@example.com");
 
         assertNotNull(result);
         assertEquals(TransactionStatus.FAILED, result.getStatus());
-        verify(emailNotificationService).sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "FAILED", BigDecimal.valueOf(100.00));
+        verify(transactionRepository, times(2)).save(any(Transaction.class)); // First fails, second for retry with FAILED
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "FAILED", BigDecimal.valueOf(100.00));
     }
+
 
     @Test
     public void testDepositCash() {
@@ -69,16 +78,23 @@ public class TransactionServiceTest {
 
         assertNotNull(result);
         assertEquals(TransactionType.CREDIT, result.getType());
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("test@example.com", "1234567890", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
     }
 
     @Test
     public void testWithdrawCash() {
+        transaction.setType(TransactionType.DEBIT);  // Set transaction type as DEBIT
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
 
         Transaction result = transactionService.withdrawCash("1234567890", BigDecimal.valueOf(50.00), "test@example.com");
 
         assertNotNull(result);
         assertEquals(TransactionType.DEBIT, result.getType());
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("test@example.com", "1234567890", "DEBIT", "SUCCESS", BigDecimal.valueOf(50.00));
     }
 
     @Test
@@ -87,8 +103,10 @@ public class TransactionServiceTest {
 
         transactionService.transferFunds("1234567890", "0987654321", BigDecimal.valueOf(100.00), "source@example.com", "target@example.com");
 
-        verify(transactionRepository, times(2)).save(any(Transaction.class));
-        verify(emailNotificationService).sendTransactionNotification("source@example.com", "1234567890", "DEBIT", "SUCCESS", BigDecimal.valueOf(100.00));
-        verify(emailNotificationService).sendTransactionNotification("target@example.com", "0987654321", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
+        verify(transactionRepository, times(2)).save(any(Transaction.class));  // One save for debit, one for credit
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("source@example.com", "1234567890", "DEBIT", "SUCCESS", BigDecimal.valueOf(100.00));
+        verify(emailNotificationService, times(1))
+                .sendTransactionNotification("target@example.com", "0987654321", "CREDIT", "SUCCESS", BigDecimal.valueOf(100.00));
     }
 }
