@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,9 +34,11 @@ public class TransactionService {
         } catch (Exception e) {
             transaction.setStatus(TransactionStatus.FAILED);
             emailNotificationService.sendTransactionNotification(recipientEmail, accountNumber, type.name(), "FAILED", amount);
-            return transactionRepository.save(transaction);
+            transactionRepository.save(transaction);  // Save the failed transaction state
+            return transaction;
         }
     }
+
 
     @Transactional
     public Transaction depositCash(String accountNumber, BigDecimal amount, String recipientEmail) {
