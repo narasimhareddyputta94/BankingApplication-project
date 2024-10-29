@@ -8,14 +8,14 @@ This repository contains the code for a banking application, developed as part o
 ## Working Code Screenshot
 
 ### Screenshot:
-![Working Code Screenshot](src/main/resources/images/Screenshot%202024-10-14%20231652.png)
+![Working Code Screenshot](src/main/resources/images/Screenshot%202024-10-28%20231844.png)
 
 ---
 
 ## Test Cases Passed Screenshot
 
 ### Screenshot:
-![Test Cases Passed Screenshot](src/main/resources/images/Screenshot%202024-10-14%20232704.png)
+![Test Cases Passed Screenshot](src/main/resources/images/Screenshot%202024-10-28%20231816.png)
 
 ---
 
