@@ -1,4 +1,5 @@
 package com.example.Banking.application.accountManagement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -40,7 +41,7 @@ public class AccountCreationTest {
 		
 		long initialCount = accountRepo.count();
 		long accountBalance = 1000;
-		LocalDateTime time = LocalDateTime.now();
+		LocalDate time = LocalDate.now();
 		AccountCreation account = new AccountCreation();
 		user.setPassword("Test123");
 		account.setUser(user);
@@ -71,7 +72,7 @@ public class AccountCreationTest {
 		        //account.setAccountType("Checkings");
 		        account.setAccountType(AccountType.CHECKINGS);
 		        account.setBalance(accountBalance);
-		        account.setCreateOn(LocalDateTime.now());
+		        account.setCreateOn(LocalDate.now());
 
 		        assertThrows(Exception.class, () -> {
 		            accountRepo.save(account); 
@@ -96,7 +97,7 @@ public class AccountCreationTest {
 			 //account.setAccountType("Savings");
 			 account.setAccountType(AccountType.SAVINGS);
 			 account.setBalance(1000L);
-			 account.setCreateOn(LocalDateTime.now());
+			 account.setCreateOn(LocalDate.now());
 			 accountRepo.save(account);
 			 Long generatedId = account.getAccountId();
 			 
@@ -117,7 +118,7 @@ public class AccountCreationTest {
 			//account.setAccountType("Checkings");
 			account.setAccountType(AccountType.CHECKINGS);
 			account.setBalance(200l);
-			account.setCreateOn(LocalDateTime.now());
+			account.setCreateOn(LocalDate.now());
 			accountRepo.save(account);
 			long firstAccountNumb = accountRepo.count();
 			accountRepo.delete(account);
@@ -141,7 +142,7 @@ public class AccountCreationTest {
 			//account.setAccountType("Savings");
 			account.setAccountType(AccountType.CHECKINGS);
 			account.setBalance(1000l);
-			account.setCreateOn(LocalDateTime.now());
+			account.setCreateOn(LocalDate.now());
 			accountRepo.save(account);
 			assertEquals(1000l, account.getBalance());
 			account.setBalance(2000l);
@@ -160,7 +161,7 @@ public class AccountCreationTest {
 			
 			
 			long accountBalance = 1000;
-			LocalDateTime time = LocalDateTime.now();
+			LocalDate time = LocalDate.now();
 			AccountCreation account = new AccountCreation();
 			//user.setPassword("Test123");
 			account.setUser(user);
@@ -175,7 +176,7 @@ public class AccountCreationTest {
 			//account1.setAccountType("Checkings");
 			account.setAccountType(AccountType.CHECKINGS);
 			account1.setBalance(100l);
-			account1.setCreateOn(LocalDateTime.now());
+			account1.setCreateOn(LocalDate.now());
 			
 			assertThrows(Exception.class, () -> {
 	            accountRepo.save(account1); 
