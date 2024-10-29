@@ -1,7 +1,7 @@
 package com.example.Banking.application.accountManagement;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AccountPreferenceRepo extends CrudRepository<AccountPreference, Long> {
+public interface AccountPreferenceRepo extends JpaRepository<AccountPreference, Long> {
 
 }

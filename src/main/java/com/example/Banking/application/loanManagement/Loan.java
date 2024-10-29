@@ -25,5 +25,5 @@ public class Loan {
     private LoanStatus loanStatus; // PENDING, APPROVED, REJECTED
 
     @ManyToOne
-    private User user;  // Assuming you have a User entity for authentication
+    private User user;
 }

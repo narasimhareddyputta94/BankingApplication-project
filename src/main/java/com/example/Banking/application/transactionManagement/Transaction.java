@@ -1,7 +1,9 @@
 package com.example.Banking.application.transactionManagement;
 
+import com.example.Banking.application.authentication.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "transactions")
@@ -35,5 +38,16 @@ public class Transaction {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
+    public void setAccountNumber(String accountNumber) {
+        if (accountNumber == null || accountNumber.isEmpty()) {
+            throw new IllegalArgumentException("Account number cannot be null or empty.");
+        }
+        this.accountNumber = accountNumber;
+    }
 
 }

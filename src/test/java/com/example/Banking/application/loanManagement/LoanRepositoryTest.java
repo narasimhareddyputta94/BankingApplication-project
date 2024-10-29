@@ -1,5 +1,6 @@
 package com.example.Banking.application.loanManagement;
 
+import com.example.Banking.application.accountManagement.AccountCreation;
 import com.example.Banking.application.authentication.User;
 import com.example.Banking.application.authentication.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ public class LoanRepositoryTest {
         user.setUsername("testUser");
         user.setPassword("testPass");
         user.setEmail("test@example.com");
+        user.setAccountType(AccountCreation.AccountType.SAVINGS); // Set account type here
         userRepository.save(user); // Save the user to the database
 
         // Create a Loan entity
@@ -44,6 +46,7 @@ public class LoanRepositoryTest {
         loan.setLoanStatus(LoanStatus.PENDING);
         loan.setUser(user); // Set the persisted user
     }
+
 
     @Test
     void testSaveLoan() {
