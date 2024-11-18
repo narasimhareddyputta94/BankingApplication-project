@@ -1,8 +1,11 @@
 package com.example.Banking.application.loanManagement;
 
-import com.example.Banking.application.accountManagement.AccountCreation;
-import com.example.Banking.application.authentication.User;
-import com.example.Banking.application.authentication.UserRepo;
+import com.example.banking.application.accountManagement.AccountCreation;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.authentication.UserRepo;
+import com.example.banking.application.loanManagement.Loan;
+import com.example.banking.application.loanManagement.LoanRepository;
+import com.example.banking.application.loanManagement.LoanStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

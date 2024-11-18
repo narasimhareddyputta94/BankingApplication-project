@@ -2,6 +2,7 @@ package com.example.Banking.application.adminPanel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.banking.application.adminPanel.Admin;
 import org.junit.jupiter.api.Test;
 
 public class AdminTest {

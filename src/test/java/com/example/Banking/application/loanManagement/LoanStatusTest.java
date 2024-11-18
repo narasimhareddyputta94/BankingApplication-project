@@ -1,5 +1,6 @@
 package com.example.Banking.application.loanManagement;
 
+import com.example.banking.application.loanManagement.LoanStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

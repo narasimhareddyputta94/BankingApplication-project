@@ -1,5 +1,9 @@
 package com.example.Banking.application.emailNotifications;
 
+import com.example.banking.application.emailNotifications.EmailNotification;
+import com.example.banking.application.emailNotifications.EmailNotificationRepository;
+import com.example.banking.application.emailNotifications.EmailNotificationService;
+import com.example.banking.application.emailNotifications.EmailStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,7 +1,10 @@
 package com.example.Banking.application.authentication;
 
-import com.example.Banking.application.accountManagement.AccountCreation;
-import com.example.Banking.application.accountManagement.AccountCreationRepo;
+import com.example.banking.application.accountManagement.AccountCreation;
+import com.example.banking.application.accountManagement.AccountCreationRepo;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.authentication.UserRepo;
+import com.example.banking.application.authentication.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

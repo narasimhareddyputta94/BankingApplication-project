@@ -1,5 +1,6 @@
 package com.example.Banking.application.emailNotifications;
 
+import com.example.banking.application.emailNotifications.EmailStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

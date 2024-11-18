@@ -1,8 +1,10 @@
 package com.example.Banking.application.report;
 
-import com.example.Banking.application.transactionManagement.Transaction;
-import com.example.Banking.application.transactionManagement.TransactionRepository;
-import com.example.Banking.application.transactionManagement.TransactionType;
+import com.example.banking.application.report.FinancialSummary;
+import com.example.banking.application.report.ReportService;
+import com.example.banking.application.transactionManagement.Transaction;
+import com.example.banking.application.transactionManagement.TransactionRepository;
+import com.example.banking.application.transactionManagement.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,6 +1,9 @@
 package com.example.Banking.application.transactionManagement;
 
-import com.example.Banking.application.authentication.User;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.transactionManagement.Transaction;
+import com.example.banking.application.transactionManagement.TransactionStatus;
+import com.example.banking.application.transactionManagement.TransactionType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

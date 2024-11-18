@@ -6,15 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.example.banking.application.accountManagement.AccountCreation;
+import com.example.banking.application.accountManagement.AccountCreationRepo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.Banking.application.authentication.User;
-import com.example.Banking.application.authentication.UserRepo;
-import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.authentication.UserRepo;
+import com.example.banking.application.accountManagement.AccountCreation.AccountType;
 
 @DataJpaTest
 @ActiveProfiles("test")

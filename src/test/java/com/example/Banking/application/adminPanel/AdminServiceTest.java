@@ -3,10 +3,11 @@ package com.example.Banking.application.adminPanel;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.example.Banking.application.authentication.User;
-import com.example.Banking.application.authentication.UserRepo;
-import com.example.Banking.application.transactionManagement.Transaction;
-import com.example.Banking.application.transactionManagement.TransactionRepository;
+import com.example.banking.application.adminPanel.AdminService;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.authentication.UserRepo;
+import com.example.banking.application.transactionManagement.Transaction;
+import com.example.banking.application.transactionManagement.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

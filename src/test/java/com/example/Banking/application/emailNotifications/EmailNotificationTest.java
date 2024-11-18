@@ -1,5 +1,7 @@
 package com.example.Banking.application.emailNotifications;
 
+import com.example.banking.application.emailNotifications.EmailNotification;
+import com.example.banking.application.emailNotifications.EmailStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
 package com.example.Banking.application.authentication;
 
+import com.example.banking.application.authentication.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
-import com.example.Banking.application.accountManagement.AccountCreation;
+import com.example.banking.application.accountManagement.AccountCreation;
 
 
 public class CreateAccountTest {

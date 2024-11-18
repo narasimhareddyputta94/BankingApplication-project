@@ -2,7 +2,11 @@
 package com.example.Banking.application.loanManagement;
 import java.util.List;
 
-import com.example.Banking.application.authentication.User;
+import com.example.banking.application.authentication.User;
+import com.example.banking.application.loanManagement.Loan;
+import com.example.banking.application.loanManagement.LoanRepository;
+import com.example.banking.application.loanManagement.LoanService;
+import com.example.banking.application.loanManagement.LoanStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
