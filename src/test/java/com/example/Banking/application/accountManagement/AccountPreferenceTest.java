@@ -34,8 +34,8 @@ public class AccountPreferenceTest {
 		user.setUsername("username123");
 		user.setEmail("123@gmail.com");
 		user.setPassword("Password");
-		user.setAccountType(AccountType.CHECKINGS);  // Setting accountType
-		user.setBalance(1000);  // Setting balance
+		user.setAccountType(AccountType.CHECKINGS);
+		user.setBalance(1000);
 		assertNotNull(userRepo);
 		userRepo.save(user);
 

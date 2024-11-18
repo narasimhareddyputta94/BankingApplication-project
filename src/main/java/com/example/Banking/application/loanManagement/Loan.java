@@ -18,11 +18,11 @@ public class Loan {
 
     private String loanType;
     private Double loanAmount;
-    private int loanDurationInMonths; // Duration in months
+    private int loanDurationInMonths;
     private Double interestRate;
 
     @Enumerated(EnumType.STRING)
-    private LoanStatus loanStatus; // PENDING, APPROVED, REJECTED
+    private LoanStatus loanStatus;
 
     @ManyToOne
     private User user;

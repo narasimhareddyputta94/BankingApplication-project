@@ -3,6 +3,7 @@ package com.example.Banking.application.authentication;
 import com.example.Banking.application.accountManagement.AccountCreation.AccountType;
 import com.example.Banking.application.accountManagement.AccountCreation;
 import com.example.Banking.application.transactionManagement.Transaction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,10 +38,12 @@ public class User {
 	@Column(name = "balance", nullable = false)
 	private long balance;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
+	@JsonIgnore
 	private AccountCreation account;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Transaction> transactions;
 }

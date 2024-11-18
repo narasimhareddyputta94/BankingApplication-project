@@ -35,7 +35,6 @@ class LoanServiceTest {
         testLoan.setId(1L);
         testLoan.setUser(testUser);
         testLoan.setLoanStatus(LoanStatus.PENDING);
-        // Set other properties as needed
     }
 
     @Test
