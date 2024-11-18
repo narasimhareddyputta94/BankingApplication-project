@@ -37,7 +37,6 @@ public class JwtUtilTest {
 
     @Test
     public void testIsTokenExpired() {
-        // Generate token with a short expiration and test expiration
         User user = new User();
         user.setId(1L);
         user.setEmail("testuser@example.com");
