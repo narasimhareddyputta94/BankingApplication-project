@@ -4,99 +4,213 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-import com.example.Banking.application.accountManagement.AccountCreation;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 
+@SpringBootTest
+@AutoConfigureMockMvc
 public class CreateAccountTest {
 
-    @InjectMocks
-    private CreateAccount createAccount;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
-    @Mock
+    @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
+
+    @Test
+    public void testSignupSuccess() throws Exception {
+        String requestBody = """
+            {
+                "email": "newuser@example.com",
+                "userName": "newUser",
+                "password": "password",
+                "accountType": "SAVINGS",
+                "balance": 5000
+            }
+        """;
+
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User registered successfully."));
     }
 
     @Test
-    public void testSignupSuccess() {
-        SignupRequest request = new SignupRequest();
-        request.setEmail("test@example.com");
-        request.setUserName("testUser");
-        request.setPassword("password");
-        request.setAccountType(AccountCreation.AccountType.SAVINGS);
-        request.setBalance(1000);
+    public void testSignupEmailExists() throws Exception {
+        String requestBody = """
+            {
+                "email": "existinguser@example.com",
+                "userName": "existingUser",
+                "password": "password",
+                "accountType": "SAVINGS",
+                "balance": 5000
+            }
+        """;
+
+        when(userService.findbyEmail("existinguser@example.com")).thenReturn(new User());
+
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Email Id already exists."));
+    }
+
+    @Test
+    public void testLoginSuccess() throws Exception {
+        String requestBody = """
+        {
+            "email": "user@example.com",
+            "password": "password"
+        }
+    """;
 
         User user = new User();
-        user.setEmail("test@example.com");
-        user.setUsername("testUser");
-        when(userService.findbyEmail(request.getEmail())).thenReturn(null);
-        when(userService.registerUser(
-                request.getUserName(),
-                request.getPassword(),
-                request.getEmail(),
-                request.getAccountType(),
-                request.getBalance())).thenReturn(user);
-
-        assertNotNull(user);
-        assertEquals("testUser", user.getUsername());
-    }
-
-    @Test
-    public void testSignupEmailExists() {
-        SignupRequest request = new SignupRequest();
-        request.setEmail("test@example.com");
-
-        when(userService.findbyEmail(anyString())).thenReturn(new User());
-
-        ResponseEntity<String> response = createAccount.Signup(request);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Email Id already exists.", response.getBody());
-    }
-
-    @Test
-    public void testLoginSuccess() {
-        Login loginRequest = new Login();
-        loginRequest.setEmail("test@example.com");
-        loginRequest.setPassword("password");
-
-        User user = new User();
-        user.setEmail("test@example.com");
+        user.setEmail("user@example.com");
         user.setPassword("encodedPassword");
 
-        when(userService.findbyEmail(anyString())).thenReturn(user);
-        when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(userService.findbyEmail("user@example.com")).thenReturn(user);
+        when(bCryptPasswordEncoder.matches("password", "encodedPassword")).thenReturn(true);
+        when(userService.login("user@example.com", "password")).thenReturn("validToken");
 
-        ResponseEntity<String> response = createAccount.login(loginRequest);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Login Successful", response.getBody());
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Login Successful. Token: validToken")));
     }
 
+
     @Test
-    public void testLoginFailure() {
-        Login loginRequest = new Login();
-        loginRequest.setEmail("wrong@example.com");
-        loginRequest.setPassword("wrongPassword");
+    public void testLoginFailure() throws Exception {
+        String requestBody = """
+        {
+            "email": "invalid@example.com",
+            "password": "wrongPassword"
+        }
+    """;
 
         when(userService.findbyEmail(anyString())).thenReturn(null);
 
-        ResponseEntity<String> response = createAccount.login(loginRequest);
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid email or password."));
+    }
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Email or password is incorrect.", response.getBody());
+    @Test
+    public void testChangePasswordSuccess() throws Exception {
+        String email = "user@example.com";
+        String currentPassword = "currentPassword";
+        String newPassword = "newPassword";
+        String confirmPassword = "newPassword";
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword("encodedCurrentPassword");
+
+        when(userService.findbyEmail(email)).thenReturn(user);
+        when(bCryptPasswordEncoder.matches(currentPassword, "encodedCurrentPassword")).thenReturn(true);
+
+        mockMvc.perform(post("/auth/changepassword")
+                        .param("email", email)
+                        .param("currentPassword", currentPassword)
+                        .param("newPassword", newPassword)
+                        .param("confirmPassword", confirmPassword))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password changed successfully."));
+
+        verify(userService).changePassword(email, newPassword, confirmPassword);
+    }
+
+
+
+    @Test
+    public void testValidateTokenSuccess() throws Exception {
+        when(userService.validateToken("validToken", "user@example.com")).thenReturn(true);
+
+        mockMvc.perform(get("/auth/validate")
+                        .param("token", "validToken")
+                        .param("email", "user@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Token is valid."));
+    }
+
+    @Test
+    public void testValidateTokenInvalid() throws Exception {
+        when(userService.validateToken("invalidToken", "user@example.com")).thenReturn(false);
+
+        mockMvc.perform(get("/auth/validate")
+                        .param("token", "invalidToken")
+                        .param("email", "user@example.com"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid or expired token."));
+    }
+
+    @Test
+    public void testLogoutSuccess() throws Exception {
+        when(userService.isTokenValidForLogout("validToken")).thenReturn(true);
+
+        mockMvc.perform(post("/auth/logout")
+                        .param("token", "validToken"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Logout successful."));
+    }
+
+    @Test
+    public void testGetAllUsers() throws Exception {
+        mockMvc.perform(get("/auth/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
+
+    @Test
+    public void testGetUserByIdSuccess() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@example.com");
+
+        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+
+        mockMvc.perform(get("/auth/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email", is("test@example.com")));
+    }
+
+    @Test
+    public void testGetUserByIdNotFound() throws Exception {
+        when(userService.getUserById(1L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/auth/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User not found with ID: 1"));
     }
 }
-

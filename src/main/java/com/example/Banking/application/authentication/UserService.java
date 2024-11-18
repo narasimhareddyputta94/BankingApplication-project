@@ -2,12 +2,14 @@ package com.example.Banking.application.authentication;
 
 import com.example.Banking.application.accountManagement.AccountCreation;
 import com.example.Banking.application.accountManagement.AccountCreationRepo;
+import com.example.Banking.application.transactionManagement.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -27,6 +29,9 @@ public class UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TransactionRepository transactionRepo;
 
     public User registerUser(String name, String password, String email, AccountCreation.AccountType accountType, long balance) {
         String encodedPassword = bCryptPasswordEncoder.encode(password);
@@ -80,10 +85,6 @@ public class UserService {
     public void changePassword(String email, String newPassword, String confirmPassword) {
         User user = userRepo.findByemail(email);
 
-        if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException("Passwords do not match");
-        }
-
         String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepo.save(user);
@@ -113,5 +114,32 @@ public class UserService {
         return true;
     }
 
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepo.findById(id);
+    }
+
+
+    public void updateUser(Long id, UpdateUser updateUser) {
+        Optional<User> existingUser = userRepo.findById(id);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+
+            if (updateUser.getUserName() != null && !updateUser.getUserName().isEmpty()) {
+                user.setUsername(updateUser.getUserName());
+            }
+
+            if (updateUser.getEmail() != null && !updateUser.getEmail().isEmpty()) {
+                user.setEmail(updateUser.getEmail());
+            }
+            userRepo.save(user);
+        } else {
+            throw new RuntimeException("User not found with ID: " + id);
+        }
+
+    }
 }
 
