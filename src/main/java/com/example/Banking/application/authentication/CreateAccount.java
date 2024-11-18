@@ -1,6 +1,11 @@
 package com.example.Banking.application.authentication;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +26,12 @@ public class CreateAccount {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+    @Operation(summary = "Sign Up a new User" , description = "Register a new User here with required details ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully."),
+            @ApiResponse(responseCode = "400", description = "Email Id already exists.", content = @Content)
+    })
     @PostMapping("/signup")
     public ResponseEntity<String> Signup(@RequestBody SignupRequest signupRequest) {
         if(userService.findbyEmail(signupRequest.getEmail()) != null){
@@ -37,15 +48,85 @@ public class CreateAccount {
         return ResponseEntity.ok("User registered successfully.");
     }
 
+    @Operation(summary = "Log in a user", description = "Authenticate a user using email and password.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login Successful. Token returned."),
+            @ApiResponse(responseCode = "400", description = "Invalid email or password.", content = @Content)
+    })
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Login loginRequest) {
         User user = userService.findbyEmail(loginRequest.getEmail());
 
-        if(user == null || !bCryptPasswordEncoder.matches((loginRequest.getPassword()), user.getPassword())) {
-            return ResponseEntity.badRequest().body("Email or password is incorrect.");
+        if(user == null && !bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+            return ResponseEntity.badRequest().body("Invalid email or password.");
+        }
+        try {
+            String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+            return ResponseEntity.ok("Login Successful. Token: " + token);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "Change user password", description = "Allows a user to change their password given their email, current password, new password, and confirmation.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password changed successfully."),
+            @ApiResponse(responseCode = "400", description = "Current password is incorrect or passwords do not match.", content = @Content)
+    })
+    @PostMapping("/changepassword")
+    public ResponseEntity<String> changePassword(
+            @RequestParam String email,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword,
+            @RequestParam String confirmPassword
+    ) {
+
+        User user = userService.findbyEmail(email);
+        if (user == null) {
+            throw new RuntimeException("User not found");
         }
 
-        return ResponseEntity.ok("Login Successful");
+        if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
+            return ResponseEntity.badRequest().body("Current Password is Incorrect.");
+        }
+
+        try {
+            userService.changePassword(email, newPassword, confirmPassword);
+            return ResponseEntity.ok("Password changed successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    @Operation(summary = "Validate JWT token", description = "Validates if the given JWT token is valid and belongs to the user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token is valid."),
+            @ApiResponse(responseCode = "400", description = "Invalid or expired token.", content = @Content)
+    })
+    @GetMapping("/validate")
+    public ResponseEntity<String> validateToken(@RequestParam String token, @RequestParam String email) {
+        boolean isValid = userService.validateToken(token, email);
+        if (isValid) {
+            return ResponseEntity.ok("Token is valid.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid or expired token.");
+        }
+    }
+
+    @Operation(summary = "Log out a user", description = "Invalidates the given JWT token for logout.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout successful."),
+            @ApiResponse(responseCode = "400", description = "Invalid or tampered token.", content = @Content)
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestParam String token) {
+        if (!userService.isTokenValidForLogout(token)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or tampered token.");
+        }
+
+        userService.logout(token);
+        return ResponseEntity.ok("Logout successful.");
     }
 
     @ControllerAdvice
