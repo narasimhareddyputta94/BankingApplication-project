@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@Log4j2
 public class CreateAccount {
 
     @Autowired
@@ -37,7 +39,9 @@ public class CreateAccount {
     })
     @PostMapping("/signup")
     public ResponseEntity<String> Signup(@RequestBody SignupRequest signupRequest) {
-        if(userService.findbyEmail(signupRequest.getEmail()) != null){
+        log.traceEntry("Entering Signup with request: {}", signupRequest);
+        if (userService.findbyEmail(signupRequest.getEmail()) != null) {
+            log.warn("Email already exists: {}", signupRequest.getEmail());
             return ResponseEntity.badRequest().body("Email Id already exists.");
         }
 
@@ -48,6 +52,7 @@ public class CreateAccount {
                 signupRequest.getAccountType(),
                 signupRequest.getBalance()
         );
+        log.traceExit("Exiting Signup with success");
         return ResponseEntity.ok("User registered successfully.");
     }
 
@@ -60,17 +65,15 @@ public class CreateAccount {
     })
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Login loginRequest) {
+        log.traceEntry("Entering login with email: {}", loginRequest.getEmail());
         User user = userService.findbyEmail(loginRequest.getEmail());
-
-        if(user == null || !bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+        if (user == null || !bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            log.warn("Login failed for email: {}", loginRequest.getEmail());
             return ResponseEntity.badRequest().body("Invalid email or password.");
         }
-        try {
-            String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
-            return ResponseEntity.ok("Login Successful. Token: " + token);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        log.traceExit("Exiting login with token: {}", token);
+        return ResponseEntity.ok("Login Successful. Token: " + token);
     }
 
     //change password for user
@@ -133,11 +136,13 @@ public class CreateAccount {
     })
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestParam String token) {
+        log.traceEntry("Entering logout with token: {}", token);
         if (!userService.isTokenValidForLogout(token)) {
+            log.warn("Invalid token for logout: {}", token);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or tampered token.");
         }
-
         userService.logout(token);
+        log.traceExit("Exiting logout with success");
         return ResponseEntity.ok("Logout successful.");
     }
 

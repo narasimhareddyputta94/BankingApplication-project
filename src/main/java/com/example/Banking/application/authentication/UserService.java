@@ -3,6 +3,7 @@ package com.example.Banking.application.authentication;
 import com.example.Banking.application.accountManagement.AccountCreation;
 import com.example.Banking.application.accountManagement.AccountCreationRepo;
 import com.example.Banking.application.transactionManagement.TransactionRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@Log4j2
 public class UserService {
 
     @Autowired
@@ -34,6 +36,7 @@ public class UserService {
     private TransactionRepository transactionRepo;
 
     public User registerUser(String name, String password, String email, AccountCreation.AccountType accountType, long balance) {
+        log.traceEntry("Entering registerUser with name: {}, email: {}, accountType: {}, balance: {}", name, email, accountType, balance);
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         User user = new User();
         user.setUsername(name);
@@ -55,91 +58,115 @@ public class UserService {
         AccountCreation saveAccount = accountRepo.save(accountCreation);
         saveUser.setAccount(saveAccount);
         userRepo.save(saveUser);
+        log.traceExit("Exiting registerUser with user: {}", saveUser);
 
         return saveUser;
     }
 
     private String generateAccountNumber() {
+        log.traceEntry("Entering generateAccountNumber");
         Random random = new Random();
         StringBuilder accountNumber = new StringBuilder();
         for (int i = 0; i <= 10; i++) {
             accountNumber.append(random.nextInt(10));
         }
+        log.traceExit("Exiting generateAccountNumber with accountNumber: {}", accountNumber.toString());
         return accountNumber.toString();
     }
 
     public User findbyEmail(String email) {
-        return userRepo.findByemail(email);
+        log.traceEntry("Entering findbyEmail with email: {}", email);
+        var user = userRepo.findByemail(email);
+        log.traceExit("Exiting findbyEmail with user: {}", user);
+        return user;
+
     }
 
     public String login(String email, String password) {
+        log.traceEntry("Entering login with email: {}", email);
+
         User user = userRepo.findByemail(email);
         if (user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user);
+        log.traceExit("Exiting login with token: {}", token);
+        return token;
 
     }
 
     public void changePassword(String email, String newPassword, String confirmPassword) {
+        log.traceEntry("Entering changePassword for email: {}", email);
+
         User user = userRepo.findByemail(email);
 
         String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepo.save(user);
+        log.traceExit("Exiting changePassword for email: {}", email);
 
     }
 
 
     public boolean validateToken(String token, String email) {
+        log.traceEntry("Entering validateToken with token: {}, email: {}", token, email);
         User user = userRepo.findByemail(email);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-        return jwtUtil.isTokenValid(token, user);
+        boolean isValid = jwtUtil.isTokenValid(token, user);
+        log.traceExit("Exiting validateToken with isValid: {}", isValid);
+        return isValid;
     }
 
     public void logout(String token) {
+        log.traceEntry("Entering logout with token: {}", token);
         jwtUtil.revokeToken(token);
-    }
+        log.traceExit("Exiting logout");    }
 
     public boolean isTokenValidForLogout(String token) {
+        log.traceEntry("Entering isTokenValidForLogout with token: {}", token);
         JwtToken jwtToken = jwtRepo.findByToken(token).orElse(null);
 
-        if (jwtToken == null || jwtToken.isRevoked() || jwtToken.isExpired()) {
-            return false;
-        }
+        boolean isValid = jwtToken != null && !jwtToken.isRevoked() && !jwtToken.isExpired();
+        log.traceExit("Exiting isTokenValidForLogout with isValid: {}", isValid);
+        return isValid;
 
-        return true;
     }
 
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        log.traceEntry("Entering getAllUsers");
+        var users = userRepo.findAll();
+        log.traceExit("Exiting getAllUsers with users: {}", users);
+        return users;
     }
 
     public Optional<User> getUserById(Long id) {
-        return userRepo.findById(id);
+        log.traceEntry("Entering getUserById with id: {}", id);
+        var user = userRepo.findById(id);
+        log.traceExit("Exiting getUserById with user: {}", user);
+        return user;
     }
 
 
     public void updateUser(Long id, UpdateUser updateUser) {
+        log.traceEntry("Entering updateUser with id: {}, updateUser: {}", id, updateUser);
         Optional<User> existingUser = userRepo.findById(id);
         if (existingUser.isPresent()) {
             User user = existingUser.get();
-
             if (updateUser.getUserName() != null && !updateUser.getUserName().isEmpty()) {
                 user.setUsername(updateUser.getUserName());
             }
-
             if (updateUser.getEmail() != null && !updateUser.getEmail().isEmpty()) {
                 user.setEmail(updateUser.getEmail());
             }
             userRepo.save(user);
         } else {
+            log.error("User not found with ID: {}", id);
             throw new RuntimeException("User not found with ID: " + id);
         }
-
+        log.traceExit("Exiting updateUser for id: {}", id);
     }
 }
 
