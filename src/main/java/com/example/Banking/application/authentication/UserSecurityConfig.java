@@ -23,8 +23,9 @@ public class UserSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/index.html", "/login.html", "/signup.html", "/static/**", "/styles.css", "/js/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
-                        .requestMatchers("/auth/signup" , "/auth/login" , "/auth/validate" , "/auth/logout").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/login", "/auth/validate", "/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -36,7 +37,5 @@ public class UserSecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-
     }
 }
-

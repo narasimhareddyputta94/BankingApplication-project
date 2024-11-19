@@ -2,6 +2,7 @@ package com.example.Banking.application.transactionManagement;
 
 import com.example.Banking.application.authentication.User;
 import org.junit.jupiter.api.Test;
+import com.example.Banking.application.transactionManagement.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

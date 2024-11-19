@@ -1,39 +1,43 @@
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('error-message');
+document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-    if (username === 'admin' && password === '123') {
-        // Successful login
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('dashboard-container').style.display = 'block';
-        errorMessage.textContent = '';
-    } else {
-        // Incorrect login
-        errorMessage.textContent = 'Invalid username or password';
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+    })
+        .then((response) => {
+            if (!response.ok) throw new Error("Invalid credentials");
+            return response.json();
+        })
+        .then(() => alert("Login successful!"))
+        .catch((err) => alert(err.message));
+});
+document.getElementById("signupForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
     }
-}
 
-function viewBalance() {
-    const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = '<p>Your account balance is: $10,000</p>';
-}
-
-function transferDeposit() {
-    const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = '<p>Transfer/Deposit functionality coming soon!</p>';
-}
-
-function loanApplication() {
-    const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = '<p>Loan Application functionality coming soon!</p>';
-}
-
-function viewStatement() {
-    const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = '<p>View Statement functionality coming soon!</p>';
-}
-
-function createAccount() {
-    alert('Create Account functionality coming soon!');
-}
+    fetch("http://localhost:8080/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+    })
+        .then((response) => {
+            if (!response.ok) throw new Error("Signup failed");
+            return response.json();
+        })
+        .then(() => alert("Signup successful!"))
+        .catch((err) => alert(err.message));
+});

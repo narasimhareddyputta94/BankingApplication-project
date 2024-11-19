@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import com.example.Banking.application.transactionManagement.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

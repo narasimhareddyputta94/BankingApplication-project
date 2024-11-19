@@ -38,11 +38,15 @@ public class CreateAccount {
             @ApiResponse(responseCode = "400", description = "Email Id already exists.", content = @Content)
     })
     @PostMapping("/signup")
-    public ResponseEntity<String> Signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<Map<String, String>> Signup(@RequestBody SignupRequest signupRequest) {
         log.traceEntry("Entering Signup with request: {}", signupRequest);
+
+        Map<String, String> response = new HashMap<>();
+
         if (userService.findbyEmail(signupRequest.getEmail()) != null) {
             log.warn("Email already exists: {}", signupRequest.getEmail());
-            return ResponseEntity.badRequest().body("Email Id already exists.");
+            response.put("message", "Email Id already exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         userService.registerUser(
@@ -52,8 +56,10 @@ public class CreateAccount {
                 signupRequest.getAccountType(),
                 signupRequest.getBalance()
         );
+
         log.traceExit("Exiting Signup with success");
-        return ResponseEntity.ok("User registered successfully.");
+        response.put("message", "User registered successfully.");
+        return ResponseEntity.ok(response);
     }
 
     //Login after signup
@@ -104,8 +110,8 @@ public class CreateAccount {
             return ResponseEntity.badRequest().body("New password and confirm password do not match.");
         }
 
-            userService.changePassword(email, newPassword, confirmPassword);
-            return ResponseEntity.ok("Password changed successfully.");
+        userService.changePassword(email, newPassword, confirmPassword);
+        return ResponseEntity.ok("Password changed successfully.");
 
     }
 
@@ -209,5 +215,6 @@ public class CreateAccount {
             return errors;
         }
     }
-}
 
+
+}

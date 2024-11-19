@@ -3,38 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banking App</title>
+    <title>Welcome</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<!-- Application Title -->
-<div class="app-title">
-    <h1>Banking Application</h1>
+<div class="hero">
+    <div class="content-box">
+        <h1>Welcome to Banking Application</h1>
+        <p>Experience a seamless and secure platform.</p>
+        <div class="buttons">
+            <a href="login.html" class="btn">Login</a>
+            <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+    </div>
 </div>
-
-<!-- Login Section -->
-<div class="login-container" id="login-container">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username" value="admin">
-    <input type="password" id="password" placeholder="Password" value="123">
-    <button onclick="login()">Login</button>
-    <p id="error-message" class="error-message"></p>
-    <button onclick="createAccount()">Create Account</button> <!-- Create Account Button -->
-</div>
-
-<!-- Dashboard Section (Hidden until login) -->
-<div class="dashboard-container" id="dashboard-container" style="display: none;">
-    <h2>Welcome, Admin!</h2>
-    <ul>
-        <li><button onclick="viewBalance()">View Account Balance</button></li>
-        <li><button onclick="transferDeposit()">Transfer/Deposit</button></li>
-        <li><button onclick="loanApplication()">Loan Application</button></li>
-        <li><button onclick="viewStatement()">View Statement</button></li>
-    </ul>
-    <div id="message"></div>
-</div>
-
-<!-- Script -->
-<script src="script.js"></script>
 </body>
 </html>

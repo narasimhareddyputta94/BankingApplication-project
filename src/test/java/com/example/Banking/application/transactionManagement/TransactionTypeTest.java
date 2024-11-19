@@ -1,6 +1,8 @@
 package com.example.Banking.application.transactionManagement;
 
 import org.junit.jupiter.api.Test;
+import com.example.Banking.application.transactionManagement.TransactionType;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="form-container">
+  <div class="form-box bordered-box">
+    <h1>Sign Up</h1>
+    <form id="signupForm">
+      <input type="text" id="userName" name="userName" placeholder="Username" required>
+      <input type="email" id="email" name="email" placeholder="Email" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Retype Password" required>
+      <div id="passwordRequirements" class="requirements">
+        <p>Password must contain:</p>
+        <ul>
+          <li id="minLength" class="invalid"><span class="icon">✖</span> At least 8 characters</li>
+          <li id="specialChar" class="invalid"><span class="icon">✖</span> At least one special character</li>
+          <li id="alphabet" class="invalid"><span class="icon">✖</span> At least one letter</li>
+          <li id="number" class="invalid"><span class="icon">✖</span> At least one number</li>
+        </ul>
+      </div>
+      <select id="accountType" name="accountType" required class="custom-select">
+        <option value="" disabled selected>Account Type</option>
+        <option value="CHECKINGS">Checkings</option>
+        <option value="SAVINGS">Savings</option>
+      </select>
+      <input type="number" id="balance" name="balance" placeholder="Initial Balance" required>
+      <button type="submit" disabled id="signupButton">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+</div>
+<script>
+  const signupForm = document.getElementById('signupForm');
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const signupButton = document.getElementById('signupButton');
+
+  const minLengthIndicator = document.getElementById('minLength');
+  const specialCharIndicator = document.getElementById('specialChar');
+  const alphabetIndicator = document.getElementById('alphabet');
+  const numberIndicator = document.getElementById('number');
+
+  const updatePasswordRequirements = () => {
+    const password = passwordInput.value;
+
+    // Check if password meets requirements
+    const hasMinLength = password.length >= 8;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasAlphabet = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    // Update UI
+    updateRequirement(minLengthIndicator, hasMinLength);
+    updateRequirement(specialCharIndicator, hasSpecialChar);
+    updateRequirement(alphabetIndicator, hasAlphabet);
+    updateRequirement(numberIndicator, hasNumber);
+
+    // Enable/disable the submit button
+    signupButton.disabled = !(
+            hasMinLength &&
+            hasSpecialChar &&
+            hasAlphabet &&
+            hasNumber &&
+            password === confirmPasswordInput.value
+    );
+  };
+
+  const updateRequirement = (element, isValid) => {
+    const icon = element.querySelector('.icon');
+    if (isValid) {
+      icon.textContent = '✔';
+      element.classList.remove('invalid');
+      element.classList.add('valid');
+    } else {
+      icon.textContent = '✖';
+      element.classList.remove('valid');
+      element.classList.add('invalid');
+    }
+  };
+
+  const validatePasswordMatch = () => {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (password !== confirmPassword) {
+      confirmPasswordInput.setCustomValidity("Passwords do not match");
+    } else {
+      confirmPasswordInput.setCustomValidity("");
+    }
+    updatePasswordRequirements();
+  };
+
+  // Event listeners
+  passwordInput.addEventListener('input', () => {
+    updatePasswordRequirements();
+    validatePasswordMatch();
+  });
+
+  confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      userName: document.getElementById('userName').value,
+      email: document.getElementById('email').value,
+      password: passwordInput.value,
+      accountType: document.getElementById('accountType').value,
+      balance: parseInt(document.getElementById('balance').value),
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message || 'Signup successful! Please login.');
+        window.location.href = 'login.html';
+      } else {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          alert(`Signup failed: ${errorData.message}`);
+        } else {
+          const errorText = await response.text();
+          alert(`Signup failed: ${errorText || 'An unknown error occurred.'}`);
+        }
+      }
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  });
+
+
+</script>
+</body>
+</html>

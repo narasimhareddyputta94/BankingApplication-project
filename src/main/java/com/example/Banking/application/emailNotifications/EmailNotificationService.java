@@ -5,6 +5,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.Banking.application.emailNotifications.EmailNotification;
+import com.example.Banking.application.emailNotifications.EmailStatus;
 
 import java.math.BigDecimal;
 
