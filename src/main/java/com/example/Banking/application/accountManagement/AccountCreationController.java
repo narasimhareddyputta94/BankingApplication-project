@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -66,12 +67,13 @@ public class AccountCreationController {
 //	        return ResponseEntity.ok("new id is " + account.getAccountId());
 //	    }
 	 
-	 @DeleteMapping
+	 @DeleteMapping("/{id}")
 	    @Operation(summary = "Delete the account based on the id given")
-	    public void delete(long id) {
+	    public ResponseEntity<Long> deleteAccount(@PathVariable("id") Long id) {
 	        log.traceEntry("Enter delete", id);
 	        service.delete(id);
 	        log.traceExit("Exit delete");
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
 	 
 	 @ResponseStatus(HttpStatus.BAD_REQUEST)

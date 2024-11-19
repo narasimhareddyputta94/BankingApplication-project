@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,38 @@ public class AccountCreationServiceTest {
 
 		response.andExpect(MockMvcResultMatchers.status().isCreated());
 		//response.andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is("New Account")));
+	}
+	
+	@Test
+	@WithMockUser(username = "root", password = "Nfl123")
+	public void testDeleteAccount() throws Exception {
+	    // Arrange - Create and save an AccountPreference
+	    User user = userRepo.findByemail("root2@example.com");
+
+	    AccountCreation account = AccountCreation.builder()
+	            .user(user)
+	            .accountType(AccountCreation.AccountType.CHECKINGS)
+	            .balance(1000l)
+	            .createOn(LocalDate.now())
+	            .accountNumber("12345678")
+	            .build();
+
+	    account = repo.save(account);
+	    long accountId = account.getAccountId();
+
+	  
+	    Assertions.assertTrue(repo.existsById(accountId));
+
+	    
+	    ResultActions response = mvc.perform(MockMvcRequestBuilders.delete(url + "/" + accountId)
+	            .with(csrf())
+	            .contentType(org.springframework.http.MediaType.APPLICATION_JSON));
+
+	    // Assert - Validate the response
+	    response.andExpect(MockMvcResultMatchers.status().isNoContent());
+
+	    // Ensure the preference no longer exists
+	    Assertions.assertFalse(repo.existsById(accountId));
 	}
 
 
