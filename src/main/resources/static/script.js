@@ -22,7 +22,6 @@ async function fetchWithAuth(url, options = {}) {
     return response.json();
 }
 
-// Login Form Submission Handler
 document.getElementById("loginForm").addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -37,21 +36,27 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
+            const errorText = await response.text(); // Handle non-JSON errors
             throw new Error(errorText || "Login failed!");
         }
 
-        const data = await response.json(); // Expecting JSON from the backend
+        const data = await response.json(); // Parse JSON only if response is OK
+        console.log("Login Response:", data);
+
         alert(data.message);
 
         if (data.token) {
             localStorage.setItem("jwtToken", data.token);
-            window.location.href = "/dashboard.html"; // Redirect to the dashboard
+            window.location.href = "/dashboard.html"; // Redirect to dashboard
+        } else {
+            throw new Error("Login failed: No token received.");
         }
     } catch (err) {
         alert(err.message);
+        console.error(err);
     }
 });
+
 
 // Signup Form Submission Handler
 document.getElementById("signupForm").addEventListener("submit", function (event) {

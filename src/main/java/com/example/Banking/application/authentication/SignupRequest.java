@@ -28,4 +28,3 @@ public class SignupRequest {
     private long balance;
 
 }
-

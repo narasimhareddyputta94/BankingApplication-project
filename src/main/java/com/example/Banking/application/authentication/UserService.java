@@ -169,4 +169,3 @@ public class UserService {
         log.traceExit("Exiting updateUser for id: {}", id);
     }
 }
-
