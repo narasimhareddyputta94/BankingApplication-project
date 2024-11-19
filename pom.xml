@@ -13,7 +13,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>Banking-application</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>Banking-application</name>
 	<description>Banking application with backend Java</description>
 
