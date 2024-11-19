@@ -48,8 +48,6 @@ public class AccountPreferenceServiceTest {
 	
 	@BeforeEach
 	void setup() {
-	   // userRepo.deleteAll(); 
-		//assertEquals(0, userRepo.count());
 	    User user = new User();
 	    user.setUsername("root");
 	    user.setEmail("root1@example.com");
@@ -57,9 +55,7 @@ public class AccountPreferenceServiceTest {
 	    user.setAccountType(AccountType.CHECKINGS);
 	    user.setBalance(5000);
 	    
-	    userRepo.save(user);
-	    //assertEquals(1, userRepo.count());
-	    
+	    userRepo.save(user);    
 	}
 	
 	@AfterEach
@@ -69,7 +65,7 @@ public class AccountPreferenceServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "root", password = "Nfl123")
+	//@WithMockUser(username = "root", password = "Nfl123")
 	public void getAll() throws Exception {
 		// when - action
 		ResultActions response = mvc.perform(MockMvcRequestBuilders.get(url));
@@ -83,21 +79,8 @@ public class AccountPreferenceServiceTest {
 
 	}
 
-//	@Test
-//	public void testNoAuthority() throws Exception {
-//
-//		ResultActions response = mvc.perform(MockMvcRequestBuilders.get(url));
-//
-//
-//		var recordCount = (int) repo.count();
-//
-//		// then - verify the output
-//		response.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-//		//response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(0)));
-//	}
-
 	@Test
-	@WithMockUser(username = "root", password = "Nfl123")
+	//@WithMockUser(username = "root", password = "Nfl123")
 	public void testPostPreference() throws Exception {
 	    
 	    User user = userRepo.findByemail("root1@example.com");
@@ -127,9 +110,9 @@ public class AccountPreferenceServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "root", password = "Nfl123")
+	//@WithMockUser(username = "root", password = "Nfl123")
 	public void testDeletePreference() throws Exception {
-	    // Arrange - Create and save an AccountPreference
+		
 	    User user = userRepo.findByemail("root1@example.com");
 
 	    AccountPreference preference = AccountPreference.builder()
@@ -150,10 +133,10 @@ public class AccountPreferenceServiceTest {
 	            .with(csrf())
 	            .contentType(org.springframework.http.MediaType.APPLICATION_JSON));
 
-	    // Assert - Validate the response
+	    
 	    response.andExpect(MockMvcResultMatchers.status().isNoContent());
 
-	    // Ensure the preference no longer exists
+	    
 	    Assertions.assertFalse(repo.existsById(preferenceId));
 	}
 
