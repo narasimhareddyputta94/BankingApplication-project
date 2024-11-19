@@ -26,6 +26,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.security.test.context.support.WithMockUser;
@@ -46,8 +47,17 @@ public class AccountPreferenceServiceTest {
 	
 	private static String url = "/api/preferences";
 	
+	private User testUser;
+	private AccountPreference testPreference;
+
+	
 	@BeforeEach
 	void setup() {
+		User checkUser = userRepo.findByemail("root1@example.com");
+		if(checkUser != null) {
+			testUser = checkUser;
+		}
+		else {
 	    User user = new User();
 	    user.setUsername("root");
 	    user.setEmail("root1@example.com");
@@ -55,14 +65,22 @@ public class AccountPreferenceServiceTest {
 	    user.setAccountType(AccountType.CHECKINGS);
 	    user.setBalance(5000);
 	    
-	    userRepo.save(user);    
+	    
+	    testUser = userRepo.save(user);    
+	}
 	}
 	
-	@AfterEach
-		void set() {
-		repo.deleteAll();
-		userRepo.deleteAll();
-	}
+	
+//	@AfterEach
+//	void cleanup() {
+//	    if (testPreference != null && repo.existsById(testPreference.getPreferenceId())) {
+//	        repo.deleteById(testPreference.getPreferenceId());
+//	    }
+//	    if (testUser != null && userRepo.existsById(testUser.getId())) {
+//	        userRepo.deleteById(testUser.getId());
+//	    }
+//	}
+
 	
 	@Test
 	//@WithMockUser(username = "root", password = "Nfl123")
@@ -76,18 +94,16 @@ public class AccountPreferenceServiceTest {
 		// then - verify the output
 		response.andExpect(MockMvcResultMatchers.status().isOk());
 		response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(recordCount)));
+		
 
 	}
 
 	@Test
-	//@WithMockUser(username = "root", password = "Nfl123")
 	public void testPostPreference() throws Exception {
 	    
 	    User user = userRepo.findByemail("root1@example.com");
-	    //System.out.println(user);
 	    
-	    
-	    
+	    String updatedOn = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 	    String json = "{"+ "\"user\":{"
 		        + "\"id\": \"" + user.getId() + "\","
 		        + "\"username\": \"username\","
@@ -97,7 +113,7 @@ public class AccountPreferenceServiceTest {
 		        + "\"balance\": \"100\"  },"
 		            + "\"preferenceType\": \"COMMUNICATION\","
 		            + "\"preferenceValue\": \"EMAIL\","
-		            + "\"updatedOn\": \"2024-11-18T10:00:00\""
+		            + "\"updatedOn\": \"" + updatedOn + "\""
 		            + "}";
 	  
 	    ResultActions response = mvc.perform(MockMvcRequestBuilders.post("/api/preferences")
@@ -107,22 +123,24 @@ public class AccountPreferenceServiceTest {
 
 	    
 	    response.andExpect(MockMvcResultMatchers.status().isCreated());
+	        
 	}
 	
 	@Test
-	//@WithMockUser(username = "root", password = "Nfl123")
 	public void testDeletePreference() throws Exception {
 		
-	    User user = userRepo.findByemail("root1@example.com");
+	    //User user = userRepo.findByemail("root1@example.com");
+		testUser = userRepo.findByemail("root1@example.com");
 
 	    AccountPreference preference = AccountPreference.builder()
-	            .user(user)
-	            .preferenceType(AccountPreference.PreferenceType.COMMUNICATION)
-	            .preferenceValue(AccountPreference.PreferenceValue.EMAIL)
+	            .user(testUser)
+	            .preferenceType(AccountPreference.PreferenceType.DISPLAY)
+	            .preferenceValue(AccountPreference.PreferenceValue.PHONE)
 	            .updatedOn(LocalDateTime.now())
 	            .build();
 
-	    preference = repo.save(preference);
+	    //preference = repo.save(preference);
+	    testPreference = repo.save(preference);
 	    long preferenceId = preference.getPreferenceId();
 
 	  
