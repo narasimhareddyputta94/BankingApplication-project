@@ -24,7 +24,7 @@ public class UserSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
-                        .requestMatchers("/auth/singup" , "/auth/login" , "/auth/validate" , "/auth/logout").permitAll()
+                        .requestMatchers("/auth/signup" , "/auth/login" , "/auth/validate" , "/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
