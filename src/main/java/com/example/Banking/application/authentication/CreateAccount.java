@@ -70,17 +70,26 @@ public class CreateAccount {
             @ApiResponse(responseCode = "400", description = "Invalid email or password.", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Login loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Login loginRequest) {
         log.traceEntry("Entering login with email: {}", loginRequest.getEmail());
         User user = userService.findbyEmail(loginRequest.getEmail());
+
         if (user == null || !bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             log.warn("Login failed for email: {}", loginRequest.getEmail());
-            return ResponseEntity.badRequest().body("Invalid email or password.");
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Invalid email or password.");
+            return ResponseEntity.badRequest().body(response);
         }
+
         String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
         log.traceExit("Exiting login with token: {}", token);
-        return ResponseEntity.ok("Login Successful. Token: " + token);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Login Successful");
+        response.put("token", token);
+        return ResponseEntity.ok(response);
     }
+
 
     //change password for user
 

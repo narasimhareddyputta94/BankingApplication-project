@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <h1>Welcome to Your Dashboard</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Account Type</th>
+            <th>Account Number</th>
+            <th>Balance</th>
+            <th>Created On</th>
+        </tr>
+        </thead>
+        <tbody id="accountsTable">
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const jwtToken = localStorage.getItem("jwtToken");
+        if (!jwtToken) {
+            alert("You must be logged in to view this page.");
+            window.location.href = "/login.html";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/accounts/user", {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Failed to fetch account data: ${errorMessage}`);
+            }
+
+            const accounts = await response.json();
+
+            const tableBody = document.getElementById("accountsTable");
+
+            if (!accounts || accounts.length === 0) {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td colspan="4">No accounts available</td>`;
+                tableBody.appendChild(row);
+            } else {
+                accounts.forEach(account => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${account.accountType || 'N/A'}</td>
+                        <td>${account.accountNumber || 'N/A'}</td>
+                        <td>${account.balance || 0}</td>
+                        <td>${account.createOn || 'N/A'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        } catch (error) {
+            alert("An error occurred while fetching account data. Please log in again.");
+            window.location.href = "/login.html";
+        }
+    });
+</script>
+</body>
+</html>

@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "Accounts", uniqueConstraints = {
-	    @UniqueConstraint(columnNames = {"userId", "accountType"}),
+		@UniqueConstraint(columnNames = {"userId", "accountType"}),
 		@UniqueConstraint(columnNames = {"accountNumber"})
-	})
+})
 
 //@Table(name = "Accounts")
 @NoArgsConstructor
@@ -32,7 +32,7 @@ public class AccountCreation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
 
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userId")
 	@NotNull
@@ -50,12 +50,12 @@ public class AccountCreation {
 	@NotNull
 	private String accountNumber;
 
-	
+
 	public enum AccountType {
-        CHECKINGS,
-        SAVINGS
-        }
-	
+		CHECKINGS,
+		SAVINGS
+	}
+
 
 	public AccountType getAccountType() {
 		return accountType;
@@ -65,6 +65,3 @@ public class AccountCreation {
 		this.accountType = accountType;
 	}
 }
-
-
-

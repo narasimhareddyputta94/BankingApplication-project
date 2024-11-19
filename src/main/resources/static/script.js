@@ -1,21 +1,64 @@
-document.getElementById("loginForm").addEventListener("submit", function (event) {
+// Helper function for making authenticated fetch requests
+async function fetchWithAuth(url, options = {}) {
+    const jwtToken = localStorage.getItem("jwtToken");
+    if (!jwtToken) {
+        alert("You must be logged in.");
+        window.location.href = "/login.html";
+        throw new Error("Not authenticated");
+    }
+
+    const headers = { Authorization: `Bearer ${jwtToken}`, ...options.headers };
+    const response = await fetch(url, { ...options, headers });
+
+    if (!response.ok) {
+        if (response.status === 401) {
+            alert("Session expired. Please log in again.");
+            localStorage.removeItem("jwtToken");
+            window.location.href = "/login.html";
+        }
+        const error = await response.text();
+        throw new Error(error || "Request failed");
+    }
+    return response.json();
+}
+
+document.getElementById("loginForm").addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    })
-        .then((response) => {
-            if (!response.ok) throw new Error("Invalid credentials");
-            return response.json();
-        })
-        .then(() => alert("Login successful!"))
-        .catch((err) => alert(err.message));
+    try {
+        const response = await fetch("/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text(); // Handle non-JSON errors
+            throw new Error(errorText || "Login failed!");
+        }
+
+        const data = await response.json(); // Parse JSON only if response is OK
+        console.log("Login Response:", data);
+
+        alert(data.message);
+
+        if (data.token) {
+            localStorage.setItem("jwtToken", data.token);
+            window.location.href = "/dashboard.html"; // Redirect to dashboard
+        } else {
+            throw new Error("Login failed: No token received.");
+        }
+    } catch (err) {
+        alert(err.message);
+        console.error(err);
+    }
 });
+
+
+// Signup Form Submission Handler
 document.getElementById("signupForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -29,7 +72,7 @@ document.getElementById("signupForm").addEventListener("submit", function (event
         return;
     }
 
-    fetch("http://localhost:8080/api/signup", {
+    fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -40,4 +83,32 @@ document.getElementById("signupForm").addEventListener("submit", function (event
         })
         .then(() => alert("Signup successful!"))
         .catch((err) => alert(err.message));
+});
+
+// Account Fetch and Display Handler
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const accounts = await fetchWithAuth("/api/accounts/user");
+        const tableBody = document.getElementById("accountsTable");
+
+        if (!accounts || accounts.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="4">No accounts available</td></tr>`;
+        } else {
+            accounts.forEach(account => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${account.accountType || 'N/A'}</td>
+                    <td>${account.accountNumber || 'N/A'}</td>
+                    <td>${account.balance.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '$0.00'}</td>
+                    <td>${new Date(account.createOn).toLocaleDateString() || 'N/A'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching account data:", error);
+        alert("An error occurred while fetching account data. Please log in again.");
+        localStorage.removeItem("jwtToken");
+        window.location.href = "/login.html";
+    }
 });
