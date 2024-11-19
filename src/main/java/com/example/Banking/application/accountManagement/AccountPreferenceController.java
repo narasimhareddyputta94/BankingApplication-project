@@ -46,7 +46,7 @@ public class AccountPreferenceController {
 	
 	 @PostMapping
 	    @Operation(summary = "Save the Preference to the database and return the preference Id")
-	    public ResponseEntity<Long> addPreference( @Valid @RequestBody AccountPreference preference) {
+	    public ResponseEntity<Long> savePreference( @Valid @RequestBody AccountPreference preference) {
 		 System.out.println(preference);
 	        log.traceEntry("enter save", preference);
 	        service.save(preference);
