@@ -23,9 +23,21 @@ public class UserSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/login.html", "/signup.html", "/static/**", "/styles.css", "/js/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login", "/auth/validate", "/auth/logout").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/login.html",
+                                "/signup.html",
+                                "/dashboard.html",
+                                "/static/**",
+                                "/styles.css",
+                                "/script.js",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/auth/signup",
+                                "/auth/login"
+                        ).permitAll()
+                        .requestMatchers("/api/accounts/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

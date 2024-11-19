@@ -29,16 +29,14 @@ public class CreateAccount {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    //SignUp a New User
-
-    @Operation(summary = "Sign Up a new User" , description = "Register a new User here with required details ")
+    // SignUp a New User
+    @Operation(summary = "Sign Up a new User", description = "Register a new User here with required details.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User registered successfully."),
             @ApiResponse(responseCode = "400", description = "Email Id already exists.", content = @Content)
     })
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> Signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<Map<String, String>> signup(@RequestBody SignupRequest signupRequest) {
         log.traceEntry("Entering Signup with request: {}", signupRequest);
 
         Map<String, String> response = new HashMap<>();
@@ -62,28 +60,33 @@ public class CreateAccount {
         return ResponseEntity.ok(response);
     }
 
-    //Login after signup
-
+    // Login a User
     @Operation(summary = "Log in a user", description = "Authenticate a user using email and password.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login Successful. Token returned."),
             @ApiResponse(responseCode = "400", description = "Invalid email or password.", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Login loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Login loginRequest) {
         log.traceEntry("Entering login with email: {}", loginRequest.getEmail());
+
         User user = userService.findbyEmail(loginRequest.getEmail());
         if (user == null || !bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             log.warn("Login failed for email: {}", loginRequest.getEmail());
-            return ResponseEntity.badRequest().body("Invalid email or password.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid email or password."));
         }
+
         String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
         log.traceExit("Exiting login with token: {}", token);
-        return ResponseEntity.ok("Login Successful. Token: " + token);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Login successful!",
+                "token", token
+        ));
     }
 
-    //change password for user
-
+    // Change Password
     @Operation(summary = "Change user password", description = "Allows a user to change their password.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password changed successfully."),
@@ -96,10 +99,9 @@ public class CreateAccount {
             @RequestParam String newPassword,
             @RequestParam String confirmPassword
     ) {
-
         User user = userService.findbyEmail(email);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
 
         if (!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
@@ -112,96 +114,47 @@ public class CreateAccount {
 
         userService.changePassword(email, newPassword, confirmPassword);
         return ResponseEntity.ok("Password changed successfully.");
-
     }
 
-
-    //Validating Token
-
+    // Validate JWT Token
     @Operation(summary = "Validate JWT token", description = "Validates if the given JWT token is valid and belongs to the user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Token is valid."),
             @ApiResponse(responseCode = "400", description = "Invalid or expired token.", content = @Content)
     })
     @GetMapping("/validate")
-    public ResponseEntity<String> validateToken(@RequestParam String token, @RequestParam String email) {
+    public ResponseEntity<Map<String, String>> validateToken(@RequestParam String token, @RequestParam String email) {
         boolean isValid = userService.validateToken(token, email);
         if (isValid) {
-            return ResponseEntity.ok("Token is valid.");
+            return ResponseEntity.ok(Map.of("message", "Token is valid."));
         } else {
-            return ResponseEntity.badRequest().body("Invalid or expired token.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid or expired token."));
         }
     }
 
-    //Logout a user
-
+    // Logout a User
     @Operation(summary = "Log out a user", description = "Invalidates the given JWT token for logout.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Logout successful."),
             @ApiResponse(responseCode = "400", description = "Invalid or tampered token.", content = @Content)
     })
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestParam String token) {
+    public ResponseEntity<Map<String, String>> logout(@RequestParam String token) {
         log.traceEntry("Entering logout with token: {}", token);
         if (!userService.isTokenValidForLogout(token)) {
             log.warn("Invalid token for logout: {}", token);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or tampered token.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid or tampered token."));
         }
         userService.logout(token);
         log.traceExit("Exiting logout with success");
-        return ResponseEntity.ok("Logout successful.");
+        return ResponseEntity.ok(Map.of("message", "Logout successful."));
     }
 
-
-    //Getting all Users
-
-    @Operation(summary = "Get all users", description = "Fetch the list of all users.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved users.")
-    })
-    @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
-
-    //Getting a user by userId
-
-    @Operation(summary = "Get user by ID", description = "Fetch a user by their ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found."),
-            @ApiResponse(responseCode = "404", description = "User not found.", content = @Content)
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return ResponseEntity.status(404).body("User not found with ID: " + id);
-        }
-    }
-
-    //Updating User Details
-
-    @Operation(summary = "Update user", description = "Update the details of an existing user.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated successfully."),
-            @ApiResponse(responseCode = "404", description = "User not found.", content = @Content)
-    })
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUser updateUser) {
-        Optional<User> existingUser = userService.getUserById(id);
-        if (existingUser.isEmpty()) {
-            return ResponseEntity.status(404).body("User not found with ID: " + id);
-        }
-        userService.updateUser(id, updateUser);
-        return ResponseEntity.ok("User updated successfully.");
-    }
-
+    // Exception Handling
     @ControllerAdvice
-    public class ControllerExceptionHandler {
+    public static class ControllerExceptionHandler {
 
         @ResponseStatus(HttpStatus.BAD_REQUEST)
         @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -215,6 +168,4 @@ public class CreateAccount {
             return errors;
         }
     }
-
-
 }
