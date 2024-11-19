@@ -48,7 +48,7 @@ public class AccountCreationServiceTest {
 
 	    User user = new User();
 	    user.setUsername("root");
-	    user.setEmail("root@example.com");
+	    user.setEmail("root2@example.com");
 	    user.setPassword("Nfl123");
 	    user.setAccountType(AccountType.CHECKINGS);
 	    user.setBalance(5000);
@@ -57,10 +57,11 @@ public class AccountCreationServiceTest {
 	    
 	}
 	
-//	@AfterEach
-//	void set() {
-//		userRepo.deleteAll();
-//	}
+	@AfterEach
+	void set() {
+		repo.deleteAll();
+		userRepo.deleteAll();
+	}
 
 
 
@@ -96,17 +97,20 @@ public class AccountCreationServiceTest {
 	@Test
 	@WithMockUser(username = "root", password = "Nfl123")
 	public void testPost() throws Exception {
-		User user = userRepo.findByemail("root@example.com");
+		User user = userRepo.findByemail("root2@example.com");
 		
 		
-		
-		String json = "{"
-		        + "\"user\": {\"userId\": " + user.getId() + "},"
-		        + "\"accountType\": \"CHECKINGS\","
-		        + "\"balance\": 5000,"
-		        + "\"createOn\": \"2024-10-27\","
-		        + "\"accountNumber\": \"1111\""
-		        + "}";
+		 String json = "{"+ "\"user\":{"
+			        + "\"id\": \"" + user.getId() + "\","
+			        + "\"username\": \"username\","
+			        + "\"email\": \"root2@example.com\","
+			        + "\"password\": \"123456\","
+			        + "\"accountType\": \"CHECKINGS\","
+			        + "\"balance\": \"100\"  },"
+			            + "\"accountType\": \"CHECKINGS\","
+			            + "\"balance\": \"1000\","
+			            + "\"createOn\": \"2024-11-18\","
+			            + "\"accountNumber\": \"12345678\"" +"}";
 
 
 		ResultActions response = mvc.perform(MockMvcRequestBuilders.post(url)
