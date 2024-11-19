@@ -159,9 +159,31 @@ public class AccountPreferenceServiceTest {
 	}
 
 	
-	
-	
+	@Test
+	public void testPostPreferenceValidationFail() throws Exception {
+		testUser = userRepo.findByemail("root1@example.com");
+		
+		String updatedOn = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		
+		String json = "{"+ "\"user\":{"
+		        + "\"id\": \"" + testUser.getId() + "\","
+		        + "\"username\": \"username\","
+		        + "\"email\": \"root1@example.com\","
+		        + "\"password\": \"123456\","
+		        + "\"accountType\": \"CHECKINGS\","
+		        + "\"balance\": \"100\"  },"
+		            + "\"preferenceType\": \"null\","
+		            + "\"preferenceValue\": \"EMAIL\","
+		            + "\"updatedOn\": \"" + updatedOn + "\""
+		            + "}";
 
+	    ResultActions response = mvc.perform(MockMvcRequestBuilders.post(url)
+	            .with(csrf())
+	            .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+	            .content(json));
+
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
 	
 

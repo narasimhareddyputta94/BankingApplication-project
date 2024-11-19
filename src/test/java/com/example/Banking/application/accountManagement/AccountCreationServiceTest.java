@@ -156,6 +156,33 @@ public class AccountCreationServiceTest {
 	   
 	    Assertions.assertFalse(repo.existsById(accountId));
 	}
+	
+	@Test
+	public void testPostValidationFail() throws Exception {
+		User user = userRepo.findByemail("root1@example.com");
+		
+		
+		String createdOn = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		
+		 String json = "{"+ "\"user\":{"
+			        + "\"id\": \"" + user.getId() + "\","
+			        + "\"username\": \"username\","
+			        + "\"email\": \"root1@example.com\","
+			        + "\"password\": \"password\","
+			        + "\"accountType\": \"CHECKINGS\","
+			        + "\"balance\": \"100\"  },"
+			            + "\"accountType\": \"null\","
+			            + "\"balance\": \"1000\","
+			            + "\"createOn\": \"" + createdOn + "\","
+			            + "\"accountNumber\": \"11111111\"" +"}";
+
+	    ResultActions response = mvc.perform(MockMvcRequestBuilders.post(url)
+	            .with(csrf())
+	            .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+	            .content(json));
+
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
 
 
