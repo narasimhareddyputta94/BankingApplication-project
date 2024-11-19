@@ -82,18 +82,7 @@ public class AccountCreationServiceTest {
 
 	}
 
-//	@Test
-//	public void testNoAuthority() throws Exception {
-//
-//		ResultActions response = mvc.perform(MockMvcRequestBuilders.get(url));
-//
-//
-//		var recordCount = (int) repo.count();
-//
-//		// then - verify the output
-//		response.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-//		//response.andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(0)));
-//	}
+
 
 	@Test
 	public void testPost() throws Exception {
