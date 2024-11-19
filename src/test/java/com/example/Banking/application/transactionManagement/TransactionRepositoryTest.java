@@ -43,7 +43,7 @@ public class TransactionRepositoryTest {
         userRepository.save(testUser);
 
         testAccount = AccountCreation.builder()
-                .user(testUser)
+                //.user(testUser)
                 .accountType(AccountType.CHECKINGS)
                 .balance(500L)
                 .createOn(LocalDate.now())

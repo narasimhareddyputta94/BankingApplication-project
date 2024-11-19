@@ -44,7 +44,7 @@ public class UserService {
 				.createOn(LocalDate.now())
 				.build();
 		AccountCreation saveAccount = accountRepo.save(accountCreation);
-		saveUser.setAccount(saveAccount);
+		//saveUser.setAccount(saveAccount);
 		userRepo.save(saveUser);
 
 		return saveUser;

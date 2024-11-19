@@ -37,10 +37,10 @@ public class User {
 	@Column(name = "balance", nullable = false)
 	private long balance;
 
-	@OneToOne
-	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
-	private AccountCreation account;
+	//@OneToOne
+	//@JoinColumn(name = "account_id", referencedColumnName = "accountId")
+	//private AccountCreation account;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Transaction> transactions;
 }

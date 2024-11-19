@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import com.example.Banking.application.authentication.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,7 +46,7 @@ public class AccountCreation {
 	private User user;
 	@NotNull(message = "Account type is required")
 	//private String accountType;
-	//@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)
 	private AccountType accountType;
 	@NotNull(message = "Balance is required")
 	private Long balance;

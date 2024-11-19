@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 
 import com.example.Banking.application.authentication.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +34,7 @@ public class AccountPreference {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long preferenceId;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userId")
 	@NotNull(message = "User Id Required")
 	private User user;
