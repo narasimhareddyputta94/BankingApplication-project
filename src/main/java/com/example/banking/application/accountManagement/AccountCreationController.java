@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -24,28 +25,30 @@ import java.util.Map;
 @Tag(name = "AccountCreation", description = "Controller layer for the accounts table")
 @Log4j2
 public class AccountCreationController {
-
+	
 	@Autowired
 	private AccountCreationService service;
-
+	
 	@GetMapping
 	@Operation(summary = "Retrieves all accounts in the database")
-	@ApiResponse(responseCode = "200", description = "Good", content = {@Content(mediaType="application/json", schema=@Schema(implementation= AccountCreation.class))})
+	@ApiResponse(responseCode = "200", description = "Good", content = {@Content(mediaType="application/json", schema=@Schema(implementation=AccountCreation.class))})
 	public List<AccountCreation> list(){
 		return service.list();
 	}
-
+	
 	 @PostMapping
 	    @Operation(summary = "Save the Account to the database and return the accountId")
-	    public long createAccount( @Valid @RequestBody AccountCreation account) {
+	    public ResponseEntity<Long> createAccount( @Valid @RequestBody AccountCreation account) {
 		 System.out.println(account);
 	        log.traceEntry("enter save", account);
 	        service.save(account);
 	        log.traceExit("exit save", account);
 	        System.out.println(account);
-	        return account.getAccountId();
+	        //return account.getAccountId();
+	        return new ResponseEntity<>(account.getAccountId(), HttpStatus.CREATED);
+	        
 	    }
-
+	 
 //	 @PostMapping("/validated")
 //	    @Operation(summary = "Save the Account and returns the Account ID")
 //	    public ResponseEntity<String> validatedSave(@Valid @RequestBody AccountCreation account) {
@@ -54,15 +57,17 @@ public class AccountCreationController {
 //	        log.traceExit("exit save", account);
 //	        return ResponseEntity.ok("new id is " + account.getAccountId());
 //	    }
-
-	 @DeleteMapping
+	 
+	 @DeleteMapping("/{id}")
 	    @Operation(summary = "Delete the account based on the id given")
-	    public void delete(long id) {
+	    public ResponseEntity<Long> deleteAccount(@PathVariable("id") Long id) {
 	        log.traceEntry("Enter delete", id);
 	        service.delete(id);
 	        log.traceExit("Exit delete");
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	        //here
 	    }
-
+	 
 	 @ResponseStatus(HttpStatus.BAD_REQUEST)
 	    @ExceptionHandler(MethodArgumentNotValidException.class)
 	    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -74,6 +79,6 @@ public class AccountCreationController {
 	        });
 	        return errors;
 	    }
-
-
+	 
+	 
 }

@@ -9,11 +9,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,13 +46,13 @@ public class AccountPreferenceController {
 	
 	 @PostMapping
 	    @Operation(summary = "Save the Preference to the database and return the preference Id")
-	    public long createAccount( @Valid @RequestBody AccountPreference preference) {
+	    public ResponseEntity<Long> savePreference( @Valid @RequestBody AccountPreference preference) {
 		 System.out.println(preference);
 	        log.traceEntry("enter save", preference);
 	        service.save(preference);
 	        log.traceExit("exit save", preference);
 	        System.out.println(preference);
-	        return preference.getPreferenceId();
+	        return new ResponseEntity<>(preference.getPreferenceId(), HttpStatus.CREATED);
 	    }
 	 
 //	 @PostMapping("/validated")
@@ -62,12 +64,13 @@ public class AccountPreferenceController {
 //	        return ResponseEntity.ok("new id is " + account.getAccountId());
 //	    }
 	 
-	 @DeleteMapping
+	 @DeleteMapping("/{id}")
 	    @Operation(summary = "Delete the preference based on the id given")
-	    public void delete(long id) {
+	    public ResponseEntity<Long> deletePreference(@PathVariable("id") Long id) {
 	        log.traceEntry("Enter delete", id);
 	        service.delete(id);
 	        log.traceExit("Exit delete");
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
 	 
 	 @ResponseStatus(HttpStatus.BAD_REQUEST)
