@@ -38,12 +38,10 @@ public class User {
 	@Column(name = "balance", nullable = false)
 	private long balance;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "account_id", referencedColumnName = "accountId")
-	@JsonIgnore
 	private AccountCreation account;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Transaction> transactions;
 }
