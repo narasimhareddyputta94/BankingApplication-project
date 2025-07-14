@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: bankingapplication-project
+  description: A comprehensive banking application designed to manage financial transactions and customer accounts efficiently.
+  annotations:
+    github.com/project-slug: narasimhareddyputta94/BankingApplication-project
+    jira/project-key: SCRUM
+    jira/label: backstage-component:bankingapplication-project
+spec:
+  type: application
+  owner: ICS
+  lifecycle: experimental
